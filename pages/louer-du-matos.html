@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Louer du matos — LOOP Sport Rent</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/loop.css" />
+  <style>
+    .page-hero {
+      background: var(--bg-dark);
+      padding: 64px 0 56px;
+      position: relative; overflow: hidden;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 80% at 70% 50%, rgba(212,228,74,0.06) 0%, transparent 70%);
+    }
+    .page-hero__inner { position: relative; z-index: 1; }
+    .page-hero__tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(212,228,74,0.15); color: var(--primary);
+      font-size: 12px; font-weight: 700; font-family: var(--font-display);
+      padding: 6px 14px; border-radius: 100px;
+      border: 1px solid rgba(212,228,74,0.3);
+      margin-bottom: 18px; letter-spacing: 0.05em; text-transform: uppercase;
+    }
+    .page-hero h1 { font-family: var(--font-display); font-weight: 800; font-size: 46px; color: var(--text-on-dark); line-height: 1.1; margin-bottom: 14px; }
+    .page-hero h1 em { font-style: normal; color: var(--primary); }
+    .page-hero p { font-size: 17px; color: rgba(245,243,238,0.55); max-width: 560px; }
+
+    /* Search bar */
+    .search-bar { background: var(--surface); padding: 24px 0; border-bottom: 1px solid var(--border); }
+    .search-bar__inner { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+    .search-field {
+      flex: 1; min-width: 180px;
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .search-field label { font-size: 11px; font-weight: 700; font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); }
+    .search-field select,
+    .search-field input {
+      border: 1.5px solid var(--border); border-radius: var(--radius-md);
+      padding: 10px 14px; font-size: 14px; font-family: var(--font-body);
+      color: var(--text); background: var(--bg); outline: none; cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .search-field select:focus,
+    .search-field input:focus { border-color: var(--primary); }
+    .search-btn { align-self: flex-end; }
+
+    /* Filters */
+    .filters { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 32px; }
+    .filter-chip {
+      padding: 8px 16px; border-radius: 100px;
+      border: 1.5px solid var(--border); background: var(--surface);
+      font-size: 13px; font-weight: 500; cursor: pointer;
+      transition: all 0.2s; color: var(--text);
+    }
+    .filter-chip:hover,
+    .filter-chip.active { background: var(--primary); border-color: var(--primary); color: var(--text); }
+
+    /* Catalog grid */
+    .catalog-layout { display: grid; grid-template-columns: 260px 1fr; gap: 32px; }
+    .sidebar { position: sticky; top: 86px; height: fit-content; }
+    .sidebar-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 16px; }
+    .sidebar-card h4 { font-family: var(--font-display); font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 14px; color: var(--text-muted); }
+    .filter-list { display: flex; flex-direction: column; gap: 8px; }
+    .filter-item { display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer; }
+    .filter-item input[type="checkbox"] { accent-color: var(--primary); width: 16px; height: 16px; cursor: pointer; }
+    .price-range { display: flex; flex-direction: column; gap: 10px; }
+    .price-range input[type="range"] { accent-color: var(--primary); width: 100%; }
+    .price-range .range-labels { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); }
+
+    .catalog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+
+    .mato-card { background: var(--surface); border-radius: var(--radius-lg); box-shadow: var(--shadow-card); border: 1px solid var(--border); overflow: hidden; display: flex; flex-direction: column; transition: box-shadow 0.2s, transform 0.2s; }
+    .mato-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-4px); }
+    .mato-card__img { height: 180px; overflow: hidden; position: relative; background: #0f1e2f; }
+    .mato-card__img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; display: block; }
+    .mato-card:hover .mato-card__img img { transform: scale(1.05); }
+    .mato-card__sport { position: absolute; top: 10px; left: 10px; background: var(--bg-dark); color: var(--primary); font-size: 11px; font-weight: 700; font-family: var(--font-display); padding: 4px 10px; border-radius: var(--radius-sm); }
+    .mato-card__body { padding: 16px; flex: 1; }
+    .mato-card__title { font-family: var(--font-display); font-weight: 700; font-size: 15px; margin-bottom: 6px; }
+    .mato-card__meta { display: flex; gap: 12px; font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
+    .mato-card__rating { display: flex; align-items: center; gap: 5px; font-size: 12px; }
+    .mato-card__footer { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-top: 1px solid var(--border); background: var(--bg); }
+    .day-price { font-family: var(--font-display); font-weight: 800; font-size: 20px; }
+    .day-price small { font-size: 12px; font-weight: 400; color: var(--text-muted); }
+
+    /* Section nav */
+    .sport-nav { display: flex; gap: 8px; margin-bottom: 32px; overflow-x: auto; padding-bottom: 4px; }
+    .sport-tab {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 18px; border-radius: var(--radius-md);
+      background: var(--surface); border: 1.5px solid var(--border);
+      font-size: 14px; font-weight: 600; font-family: var(--font-display);
+      cursor: pointer; white-space: nowrap; transition: all 0.2s; color: var(--text);
+    }
+    .sport-tab:hover,
+    .sport-tab.active { background: var(--primary); border-color: var(--primary); }
+
+    @media (max-width: 960px) {
+      .catalog-layout { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+      .catalog-grid { grid-template-columns: 1fr; }
+      .page-hero h1 { font-size: 32px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════ HEADER ═══════════════ -->
+<header class="header">
+  <div class="container header__inner">
+    <a href="index.html" class="logo">
+      <img src="../img/loop-Logo.png" alt="LOOP Sport Rent" class="logo__img" />
+    </a>
+    <nav class="nav">
+      <a href="louer-du-matos.html" style="color:var(--primary)">Louer du matos</a>
+      <a href="activites.html">Activités</a>
+      <a href="destinations.html">Destinations</a>
+      <a href="espace-pro.html">Espace Pro</a>
+    </nav>
+    <div class="header__actions">
+      <button class="btn-link">Se connecter</button>
+      <a href="#" class="btn btn-primary btn-sm">Réserver</a>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════ PAGE HERO ═══════════════ -->
+<section class="page-hero">
+  <div class="container page-hero__inner">
+    <div class="page-hero__tag">🎒 Catalogue matériel</div>
+    <h1>Loue le matos.<br><em>Vit l'aventure.</em></h1>
+    <p>Du matériel pro, entretenu, assurance incluse. Livraison sur le lieu de ton activité ou retrait chez le partenaire.</p>
+  </div>
+</section>
+
+<!-- ═══════════════ TRUST STRIP ═══════════════ -->
+<div class="trust-strip">
+  <div class="container trust-strip__inner">
+    <div class="trust-item">✅ Matériel certifié</div>
+    <div class="trust-item">🔄 Retour flexible</div>
+    <div class="trust-item">🛡 Assurance incluse</div>
+    <div class="trust-item">⭐ 4,9/5 — 3 000 avis</div>
+  </div>
+</div>
+
+<!-- ═══════════════ SEARCH BAR ═══════════════ -->
+<div class="search-bar">
+  <div class="container search-bar__inner">
+    <div class="search-field">
+      <label>Sport</label>
+      <select>
+        <option>Tous les sports</option>
+        <option>Paddle & Kayak</option>
+        <option>Vélo & VTT</option>
+        <option>Ski & Snowboard</option>
+        <option>Surf & Bodyboard</option>
+        <option>Parapente</option>
+        <option>Trail & Randonnée</option>
+      </select>
+    </div>
+    <div class="search-field">
+      <label>Destination</label>
+      <select>
+        <option>Toute la France</option>
+        <option>Annecy</option>
+        <option>Chamonix</option>
+        <option>Savoie</option>
+        <option>Lacanau</option>
+      </select>
+    </div>
+    <div class="search-field">
+      <label>Date de début</label>
+      <input type="date" />
+    </div>
+    <div class="search-field">
+      <label>Durée</label>
+      <select>
+        <option>1 jour</option>
+        <option>2 jours</option>
+        <option>3 jours</option>
+        <option>1 semaine</option>
+      </select>
+    </div>
+    <div class="search-btn">
+      <button class="btn btn-primary btn-md">🔍 Rechercher</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ CATALOG ═══════════════ -->
+<section class="section">
+  <div class="container">
+
+    <!-- Sport tabs -->
+    <div class="sport-nav">
+      <div class="sport-tab active">🏄 Tous</div>
+      <div class="sport-tab">🛶 Paddle & Kayak</div>
+      <div class="sport-tab">🚴 Vélo & VTT</div>
+      <div class="sport-tab">⛷ Ski & Snowboard</div>
+      <div class="sport-tab">🌊 Surf</div>
+      <div class="sport-tab">🪂 Parapente</div>
+      <div class="sport-tab">🥾 Randonnée</div>
+    </div>
+
+    <div class="catalog-layout">
+      <!-- Sidebar filters -->
+      <aside class="sidebar">
+        <div class="sidebar-card">
+          <h4>Fourchette de prix</h4>
+          <div class="price-range">
+            <input type="range" min="5" max="200" value="100" />
+            <div class="range-labels"><span>5 €</span><span>100 €/jour</span></div>
+          </div>
+        </div>
+        <div class="sidebar-card">
+          <h4>Type de matériel</h4>
+          <div class="filter-list">
+            <label class="filter-item"><input type="checkbox" checked /> Embarcations</label>
+            <label class="filter-item"><input type="checkbox" checked /> Cycles</label>
+            <label class="filter-item"><input type="checkbox" checked /> Ski & Glisse</label>
+            <label class="filter-item"><input type="checkbox" /> Équipement montagne</label>
+            <label class="filter-item"><input type="checkbox" /> Tenue & Combinaison</label>
+          </div>
+        </div>
+        <div class="sidebar-card">
+          <h4>Options</h4>
+          <div class="filter-list">
+            <label class="filter-item"><input type="checkbox" checked /> Assurance incluse</label>
+            <label class="filter-item"><input type="checkbox" /> Livraison sur site</label>
+            <label class="filter-item"><input type="checkbox" /> Bundle activité dispo</label>
+            <label class="filter-item"><input type="checkbox" /> Dispo ce week-end</label>
+          </div>
+        </div>
+        <div class="sidebar-card">
+          <h4>Note minimum</h4>
+          <div class="filter-list">
+            <label class="filter-item"><input type="checkbox" checked /> ⭐⭐⭐⭐⭐ 5</label>
+            <label class="filter-item"><input type="checkbox" checked /> ⭐⭐⭐⭐ 4+</label>
+            <label class="filter-item"><input type="checkbox" /> ⭐⭐⭐ 3+</label>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Grid -->
+      <div>
+        <div class="catalog-grid">
+
+          <div class="mato-card">
+            <div class="mato-card__img">
+              <img src="../img/paddle-annecy.png" alt="Paddle SUP" />
+              <div class="mato-card__sport">🛶 Paddle</div>
+            </div>
+            <div class="mato-card__body">
+              <div class="mato-card__title">Stand-up paddle SUP 10'6"</div>
+              <div class="mato-card__meta">
+                <span>📍 Annecy</span>
+                <span>🛡 Assurance incluse</span>
+              </div>
+              <div class="mato-card__rating"><span class="stars">★★★★★</span> 4,9 <span class="muted">(87 avis)</span></div>
+            </div>
+            <div class="mato-card__footer">
+              <div class="day-price">18 €<small>/jour</small></div>
+              <a href="#" class="btn btn-primary btn-sm">Réserver</a>
+            </div>
+          </div>
+
+          <div class="mato-card">
+            <div class="mato-card__img">
+              <img src="../img/paddle.png" alt="Kayak biplace" />
+              <div class="mato-card__sport">🛶 Kayak</div>
+            </div>
+            <div class="mato-card__body">
+              <div class="mato-card__title">Kayak biplace + pagaies</div>
+              <div class="mato-card__meta">
+                <span>📍 Annecy</span>
+                <span>🛡 Assurance incluse</span>
+              </div>
+              <div class="mato-card__rating"><span class="stars">★★★★★</span> 4,8 <span class="muted">(53 avis)</span></div>
+            </div>
+            <div class="mato-card__footer">
+              <div class="day-price">28 €<small>/jour</small></div>
+              <a href="#" class="btn btn-primary btn-sm">Réserver</a>
+            </div>
+          </div>
+
+          <div class="mato-card">
+            <div class="mato-card__img">
+              <img src="../img/rando-montagne.png" alt="Kit randonnée" />
+              <div class="mato-card__sport">🥾 Rando</div>
+            </div>
+            <div class="mato-card__body">
+              <div class="mato-card__title">Kit randonnée complet — bâtons + sac</div>
+              <div class="mato-card__meta">
+                <span>📍 Chamonix</span>
+                <span>🛡 Assurance incluse</span>
+              </div>
+              <div class="mato-card__rating"><span class="stars">★★★★★</span> 5,0 <span class="muted">(121 avis)</span></div>
+            </div>
+            <div class="mato-card__footer">
+              <div class="day-price">12 €<small>/jour</small></div>
+              <a href="#" class="btn btn-primary btn-sm">Réserver</a>
+            </div>
+          </div>
+
+          <div class="mato-card">
+            <div class="mato-card__img">
+              <img src="../img/dest-chamonix.jpg" alt="Ski alpin" />
+              <div class="mato-card__sport">⛷ Ski</div>
+            </div>
+            <div class="mato-card__body">
+              <div class="mato-card__title">Pack ski alpin — skis + chaussures + bâtons</div>
+              <div class="mato-card__meta">
+                <span>📍 Savoie</span>
+                <span>🛡 Assurance incluse</span>
+              </div>
+              <div class="mato-card__rating"><span class="stars">★★★★★</span> 4,7 <span class="muted">(204 avis)</span></div>
+            </div>
+            <div class="mato-card__footer">
+              <div class="day-price">35 €<small>/jour</small></div>
+              <a href="#" class="btn btn-primary btn-sm">Réserver</a>
+            </div>
+          </div>
+
+          <div class="mato-card">
+            <div class="mato-card__img">
+              <img src="../img/dest-lacanau.jpg" alt="Planche de surf" />
+              <div class="mato-card__sport">🌊 Surf</div>
+            </div>
+            <div class="mato-card__body">
+              <div class="mato-card__title">Planche de surf 7'0" + combinaison</div>
+              <div class="mato-card__meta">
+                <span>📍 Lacanau</span>
+                <span>🛡 Assurance incluse</span>
+              </div>
+              <div class="mato-card__rating"><span class="stars">★★★★★</span> 4,9 <span class="muted">(67 avis)</span></div>
+            </div>
+            <div class="mato-card__footer">
+              <div class="day-price">22 €<small>/jour</small></div>
+              <a href="#" class="btn btn-primary btn-sm">Réserver</a>
+            </div>
+          </div>
+
+          <div class="mato-card">
+            <div class="mato-card__img">
+              <img src="../img/parapente-chamonix.png" alt="Casque parapente" />
+              <div class="mato-card__sport">🪂 Parapente</div>
+            </div>
+            <div class="mato-card__body">
+              <div class="mato-card__title">Casque + combinaison parapente</div>
+              <div class="mato-card__meta">
+                <span>📍 Chamonix</span>
+                <span>🛡 Assurance incluse</span>
+              </div>
+              <div class="mato-card__rating"><span class="stars">★★★★★</span> 4,8 <span class="muted">(39 avis)</span></div>
+            </div>
+            <div class="mato-card__footer">
+              <div class="day-price">15 €<small>/jour</small></div>
+              <a href="#" class="btn btn-primary btn-sm">Réserver</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ CTA ═══════════════ -->
+<section class="cta-final">
+  <div class="container">
+    <h2 class="cta-final__title">Ton matos t'attend.<br><em>Reserve en 3 clics.</em></h2>
+    <p class="cta-final__sub">Assurance incluse · Pros vérifiés · 0€ caution cachée</p>
+    <div class="cta-final__actions">
+      <a href="#" class="btn btn-primary btn-lg">🎒 Voir tout le catalogue</a>
+      <a href="activites.html" class="btn btn-secondary btn-lg">Voir les activités</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__inner">
+      <div class="footer__brand">
+        <img src="../img/loop-Logo.png" alt="LOOP" class="footer__logo" />
+        <p>Tout le sport. Une seule boucle.<br>Location de matériel sportif en France.</p>
+      </div>
+      <div class="footer__col">
+        <h5>Location</h5>
+        <ul>
+          <li><a href="#">Paddle & kayak</a></li>
+          <li><a href="#">Vélo & VTT</a></li>
+          <li><a href="#">Ski & snowboard</a></li>
+          <li><a href="#">Surf & bodyboard</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h5>Destinations</h5>
+        <ul>
+          <li><a href="#">Annecy</a></li>
+          <li><a href="#">Chamonix</a></li>
+          <li><a href="#">Savoie</a></li>
+          <li><a href="#">Lacanau</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h5>LOOP</h5>
+        <ul>
+          <li><a href="espace-pro.html">Espace Pro</a></li>
+          <li><a href="#">Notre histoire</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">CGU & Mentions</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© 2026 LOOP Sport Rent — Tous droits réservés</span>
+      <span>🔁 Tout le sport. Une seule boucle.</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

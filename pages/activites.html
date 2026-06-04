@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Activités — LOOP Sport Rent</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/loop.css" />
+  <style>
+    .page-hero {
+      background: var(--bg-dark);
+      padding: 64px 0 56px;
+      position: relative; overflow: hidden;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 80% at 30% 50%, rgba(212,228,74,0.06) 0%, transparent 70%);
+    }
+    .page-hero__inner { position: relative; z-index: 1; }
+    .page-hero__tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(212,228,74,0.15); color: var(--primary);
+      font-size: 12px; font-weight: 700; font-family: var(--font-display);
+      padding: 6px 14px; border-radius: 100px;
+      border: 1px solid rgba(212,228,74,0.3);
+      margin-bottom: 18px; letter-spacing: 0.05em; text-transform: uppercase;
+    }
+    .page-hero h1 { font-family: var(--font-display); font-weight: 800; font-size: 46px; color: var(--text-on-dark); line-height: 1.1; margin-bottom: 14px; }
+    .page-hero h1 em { font-style: normal; color: var(--primary); }
+    .page-hero p { font-size: 17px; color: rgba(245,243,238,0.55); max-width: 560px; }
+
+    /* Category tabs */
+    .cat-tabs { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 40px; }
+    .cat-tab {
+      display: flex; align-items: center; gap: 8px;
+      padding: 12px 20px; border-radius: var(--radius-lg);
+      background: var(--surface); border: 1.5px solid var(--border);
+      font-size: 14px; font-weight: 600; font-family: var(--font-display);
+      cursor: pointer; transition: all 0.2s; color: var(--text);
+    }
+    .cat-tab:hover, .cat-tab.active {
+      background: var(--primary); border-color: var(--primary);
+    }
+    .cat-tab .tab-count {
+      background: rgba(28,43,30,0.1); border-radius: 100px;
+      font-size: 11px; padding: 2px 8px; font-weight: 700;
+    }
+    .cat-tab.active .tab-count { background: rgba(28,43,30,0.18); }
+
+    /* Activities grid */
+    .activities-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+    .act-card {
+      background: var(--surface); border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card); border: 1px solid var(--border);
+      overflow: hidden; display: flex; flex-direction: column;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .act-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-4px); }
+    .act-card__img { height: 200px; position: relative; overflow: hidden; }
+    .act-card__img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; display: block; }
+    .act-card:hover .act-card__img img { transform: scale(1.05); }
+    .act-card__badges { position: absolute; top: 12px; left: 12px; display: flex; gap: 6px; }
+    .act-card__level {
+      background: var(--bg-dark); color: rgba(245,243,238,0.85);
+      font-size: 10px; font-weight: 700; font-family: var(--font-display);
+      padding: 4px 10px; border-radius: var(--radius-sm); text-transform: uppercase;
+    }
+    .act-card__body { padding: 20px; flex: 1; }
+    .act-card__sport { font-size: 11px; font-weight: 700; font-family: var(--font-display); color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+    .act-card__title { font-family: var(--font-display); font-weight: 700; font-size: 16px; margin-bottom: 8px; line-height: 1.3; }
+    .act-card__includes { font-size: 13px; color: var(--text-muted); margin-bottom: 8px; }
+    .act-card__includes strong { color: var(--text); }
+    .act-card__infos { display: flex; gap: 14px; font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
+    .act-card__rating { display: flex; align-items: center; gap: 5px; font-size: 13px; }
+    .act-card__footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 20px; border-top: 1px solid var(--border); background: var(--bg);
+    }
+    .price-block { display: flex; flex-direction: column; }
+    .price-current { font-family: var(--font-display); font-weight: 800; font-size: 22px; }
+    .price-current small { font-size: 12px; font-weight: 400; color: var(--text-muted); }
+    .price-old { font-size: 12px; color: var(--text-muted); text-decoration: line-through; }
+
+    /* Featured band */
+    .featured-band {
+      background: var(--bg-dark); border-radius: var(--radius-xl);
+      padding: 48px; margin: 48px 0;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center;
+    }
+    .featured-band__tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(212,228,74,0.15); color: var(--primary);
+      font-size: 11px; font-weight: 700; font-family: var(--font-display);
+      padding: 5px 12px; border-radius: 100px;
+      border: 1px solid rgba(212,228,74,0.3);
+      margin-bottom: 16px; letter-spacing: 0.05em; text-transform: uppercase;
+    }
+    .featured-band h3 { font-family: var(--font-display); font-weight: 800; font-size: 30px; color: var(--text-on-dark); line-height: 1.2; margin-bottom: 12px; }
+    .featured-band h3 em { font-style: normal; color: var(--primary); }
+    .featured-band p { font-size: 15px; color: rgba(245,243,238,0.55); line-height: 1.7; margin-bottom: 24px; }
+    .featured-band__img { border-radius: var(--radius-lg); overflow: hidden; height: 260px; }
+    .featured-band__img img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* Search bar */
+    .search-bar { background: var(--surface); padding: 24px 0; border-bottom: 1px solid var(--border); }
+    .search-bar__inner { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+    .search-field { flex: 1; min-width: 160px; display: flex; flex-direction: column; gap: 4px; }
+    .search-field label { font-size: 11px; font-weight: 700; font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); }
+    .search-field select, .search-field input {
+      border: 1.5px solid var(--border); border-radius: var(--radius-md);
+      padding: 10px 14px; font-size: 14px; font-family: var(--font-body);
+      color: var(--text); background: var(--bg); outline: none; cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .search-field select:focus, .search-field input:focus { border-color: var(--primary); }
+
+    @media (max-width: 960px) {
+      .activities-grid { grid-template-columns: 1fr; }
+      .featured-band { grid-template-columns: 1fr; }
+      .page-hero h1 { font-size: 32px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════ HEADER ═══════════════ -->
+<header class="header">
+  <div class="container header__inner">
+    <a href="index.html" class="logo">
+      <img src="../img/loop-Logo.png" alt="LOOP Sport Rent" class="logo__img" />
+    </a>
+    <nav class="nav">
+      <a href="louer-du-matos.html">Louer du matos</a>
+      <a href="activites.html" style="color:var(--primary)">Activités</a>
+      <a href="destinations.html">Destinations</a>
+      <a href="espace-pro.html">Espace Pro</a>
+    </nav>
+    <div class="header__actions">
+      <button class="btn-link">Se connecter</button>
+      <a href="#" class="btn btn-primary btn-sm">Réserver</a>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════ PAGE HERO ═══════════════ -->
+<section class="page-hero">
+  <div class="container page-hero__inner">
+    <div class="page-hero__tag">🏃 Activités sportives</div>
+    <h1>Des expériences.<br><em>Pas juste du sport.</em></h1>
+    <p>Cours, sessions guidées, aventures en groupe — réserve une activité avec matos inclus. Tout-en-un, assurance comprise.</p>
+  </div>
+</section>
+
+<!-- ═══════════════ TRUST STRIP ═══════════════ -->
+<div class="trust-strip">
+  <div class="container trust-strip__inner">
+    <div class="trust-item">✅ Guides certifiés</div>
+    <div class="trust-item">⚡ Matos inclus dans chaque bundle</div>
+    <div class="trust-item">🛡 Assurance RC incluse</div>
+    <div class="trust-item">⭐ 4,9/5 — 3 000 avis</div>
+  </div>
+</div>
+
+<!-- ═══════════════ SEARCH ═══════════════ -->
+<div class="search-bar">
+  <div class="container search-bar__inner">
+    <div class="search-field">
+      <label>Activité</label>
+      <select>
+        <option>Toutes les activités</option>
+        <option>Paddle & Kayak</option>
+        <option>Parapente</option>
+        <option>Randonnée guidée</option>
+        <option>Surf</option>
+        <option>Vélo & VTT</option>
+        <option>Ski & Snowboard</option>
+      </select>
+    </div>
+    <div class="search-field">
+      <label>Destination</label>
+      <select>
+        <option>Toute la France</option>
+        <option>Annecy</option>
+        <option>Chamonix</option>
+        <option>Savoie</option>
+        <option>Lacanau</option>
+      </select>
+    </div>
+    <div class="search-field">
+      <label>Date</label>
+      <input type="date" />
+    </div>
+    <div class="search-field">
+      <label>Niveau</label>
+      <select>
+        <option>Tous niveaux</option>
+        <option>Débutant</option>
+        <option>Intermédiaire</option>
+        <option>Expert</option>
+      </select>
+    </div>
+    <div style="align-self:flex-end">
+      <button class="btn btn-primary btn-md">🔍 Chercher</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ ACTIVITÉS ═══════════════ -->
+<section class="section">
+  <div class="container">
+
+    <!-- Category tabs -->
+    <div class="cat-tabs">
+      <div class="cat-tab active">🏄 Tout <span class="tab-count">94</span></div>
+      <div class="cat-tab">🛶 Eau <span class="tab-count">28</span></div>
+      <div class="cat-tab">⛰ Montagne <span class="tab-count">34</span></div>
+      <div class="cat-tab">🌊 Côtier <span class="tab-count">19</span></div>
+      <div class="cat-tab">🚴 Roue <span class="tab-count">13</span></div>
+    </div>
+
+    <!-- Featured -->
+    <div class="featured-band">
+      <div>
+        <div class="featured-band__tag">⚡ Bundle LOOP du moment</div>
+        <h3>Paddle 2h + cours<br><em>sur le lac d'Annecy</em></h3>
+        <p>Le best-seller LOOP. Un moniteur certifié, un paddle inclus, une assurance casse, et la plus belle vue de France. En 2 minutes tu es réservé.</p>
+        <div style="display:flex; gap:14px; align-items:center; flex-wrap:wrap;">
+          <div>
+            <div style="font-family:var(--font-display); font-weight:800; font-size:28px; color:var(--primary)">75 €<span style="font-size:14px; font-weight:400; color:rgba(245,243,238,0.5)">/pers</span></div>
+            <div style="font-size:12px; color:rgba(245,243,238,0.4); text-decoration:line-through">105 €</div>
+          </div>
+          <a href="#" class="btn btn-primary btn-lg">Réserver ce bundle</a>
+        </div>
+      </div>
+      <div class="featured-band__img">
+        <img src="../img/paddle-annecy.png" alt="Paddle Annecy" />
+      </div>
+    </div>
+
+    <!-- Grid -->
+    <div class="activities-grid">
+
+      <div class="act-card">
+        <div class="act-card__img">
+          <img src="../img/paddle-annecy.png" alt="Cours de paddle" />
+          <div class="act-card__badges">
+            <span class="badge-loop">⚡ Bundle</span>
+            <span class="act-card__level">Débutant</span>
+          </div>
+        </div>
+        <div class="act-card__body">
+          <div class="act-card__sport">🛶 Paddle</div>
+          <div class="act-card__title">Cours de paddle 2h — Lac d'Annecy</div>
+          <div class="act-card__includes">Inclus : <strong>paddle + gilet + assurance</strong></div>
+          <div class="act-card__infos"><span>⏱ 2h</span><span>👥 max 8 pers</span><span>📍 Annecy</span></div>
+          <div class="act-card__rating"><span class="stars">★★★★★</span> 4,9 <span class="muted">(234 avis)</span></div>
+        </div>
+        <div class="act-card__footer">
+          <div class="price-block">
+            <span class="price-current">75 €<small>/pers</small></span>
+            <span class="price-old">105 €</span>
+          </div>
+          <a href="#" class="btn btn-primary btn-sm">Réserver</a>
+        </div>
+      </div>
+
+      <div class="act-card">
+        <div class="act-card__img">
+          <img src="../img/parapente-chamonix.png" alt="Parapente tandem" />
+          <div class="act-card__badges">
+            <span class="badge-loop">⚡ Bundle</span>
+            <span class="act-card__level">Tous niveaux</span>
+          </div>
+        </div>
+        <div class="act-card__body">
+          <div class="act-card__sport">🪂 Parapente</div>
+          <div class="act-card__title">Vol tandem parapente — Chamonix</div>
+          <div class="act-card__includes">Inclus : <strong>casque + combinaison + photos</strong></div>
+          <div class="act-card__infos"><span>⏱ 20 min</span><span>👥 1 pers</span><span>📍 Chamonix</span></div>
+          <div class="act-card__rating"><span class="stars">★★★★★</span> 4,8 <span class="muted">(189 avis)</span></div>
+        </div>
+        <div class="act-card__footer">
+          <div class="price-block">
+            <span class="price-current">120 €<small>/pers</small></span>
+            <span class="price-old">150 €</span>
+          </div>
+          <a href="#" class="btn btn-primary btn-sm">Réserver</a>
+        </div>
+      </div>
+
+      <div class="act-card">
+        <div class="act-card__img">
+          <img src="../img/rando-montagne.png" alt="Rando guidée" />
+          <div class="act-card__badges">
+            <span class="badge-loop">⚡ Bundle</span>
+            <span class="act-card__level">Intermédiaire</span>
+          </div>
+        </div>
+        <div class="act-card__body">
+          <div class="act-card__sport">🥾 Randonnée</div>
+          <div class="act-card__title">Rando guidée "Lac Blanc" — Chamonix</div>
+          <div class="act-card__includes">Inclus : <strong>bâtons + crampons + sac à dos</strong></div>
+          <div class="act-card__infos"><span>⏱ 6h</span><span>👥 max 12 pers</span><span>📍 Chamonix</span></div>
+          <div class="act-card__rating"><span class="stars">★★★★★</span> 4,9 <span class="muted">(312 avis)</span></div>
+        </div>
+        <div class="act-card__footer">
+          <div class="price-block">
+            <span class="price-current">45 €<small>/pers</small></span>
+            <span class="price-old">65 €</span>
+          </div>
+          <a href="#" class="btn btn-primary btn-sm">Réserver</a>
+        </div>
+      </div>
+
+      <div class="act-card">
+        <div class="act-card__img">
+          <img src="../img/dest-lacanau.jpg" alt="Cours de surf" />
+          <div class="act-card__badges">
+            <span class="badge-loop">⚡ Bundle</span>
+            <span class="act-card__level">Débutant</span>
+          </div>
+        </div>
+        <div class="act-card__body">
+          <div class="act-card__sport">🌊 Surf</div>
+          <div class="act-card__title">Cours de surf 2h — Lacanau Océan</div>
+          <div class="act-card__includes">Inclus : <strong>planche + combinaison + leash</strong></div>
+          <div class="act-card__infos"><span>⏱ 2h</span><span>👥 max 6 pers</span><span>📍 Lacanau</span></div>
+          <div class="act-card__rating"><span class="stars">★★★★★</span> 4,7 <span class="muted">(98 avis)</span></div>
+        </div>
+        <div class="act-card__footer">
+          <div class="price-block">
+            <span class="price-current">55 €<small>/pers</small></span>
+            <span class="price-old">75 €</span>
+          </div>
+          <a href="#" class="btn btn-primary btn-sm">Réserver</a>
+        </div>
+      </div>
+
+      <div class="act-card">
+        <div class="act-card__img">
+          <img src="../img/dest-savoie.jpg" alt="Ski freeride" />
+          <div class="act-card__badges">
+            <span class="badge-loop">⚡ Bundle</span>
+            <span class="act-card__level">Expert</span>
+          </div>
+        </div>
+        <div class="act-card__body">
+          <div class="act-card__sport">⛷ Ski</div>
+          <div class="act-card__title">Session freeride hors-piste — Savoie</div>
+          <div class="act-card__includes">Inclus : <strong>skis + DVA + sonde + pelle</strong></div>
+          <div class="act-card__infos"><span>⏱ Journée</span><span>👥 max 4 pers</span><span>📍 Savoie</span></div>
+          <div class="act-card__rating"><span class="stars">★★★★★</span> 5,0 <span class="muted">(41 avis)</span></div>
+        </div>
+        <div class="act-card__footer">
+          <div class="price-block">
+            <span class="price-current">180 €<small>/pers</small></span>
+            <span class="price-old">220 €</span>
+          </div>
+          <a href="#" class="btn btn-primary btn-sm">Réserver</a>
+        </div>
+      </div>
+
+      <div class="act-card">
+        <div class="act-card__img">
+          <img src="../img/dest-annecy.jpg" alt="Canyoning" />
+          <div class="act-card__badges">
+            <span class="badge-loop">⚡ Bundle</span>
+            <span class="act-card__level">Intermédiaire</span>
+          </div>
+        </div>
+        <div class="act-card__body">
+          <div class="act-card__sport">💧 Canyoning</div>
+          <div class="act-card__title">Canyoning "Angon" — Annecy</div>
+          <div class="act-card__includes">Inclus : <strong>combinaison + baudrier + casque + guide</strong></div>
+          <div class="act-card__infos"><span>⏱ 4h</span><span>👥 max 8 pers</span><span>📍 Annecy</span></div>
+          <div class="act-card__rating"><span class="stars">★★★★★</span> 4,9 <span class="muted">(76 avis)</span></div>
+        </div>
+        <div class="act-card__footer">
+          <div class="price-block">
+            <span class="price-current">65 €<small>/pers</small></span>
+            <span class="price-old">85 €</span>
+          </div>
+          <a href="#" class="btn btn-primary btn-sm">Réserver</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ CTA FINAL ═══════════════ -->
+<section class="cta-final">
+  <div class="container">
+    <h2 class="cta-final__title">Prêt à boucler<br><em>ta prochaine aventure ?</em></h2>
+    <p class="cta-final__sub">Tout le sport. Une seule boucle.</p>
+    <div class="cta-final__actions">
+      <a href="#" class="btn btn-primary btn-lg">🔥 Voir toutes les activités</a>
+      <a href="louer-du-matos.html" class="btn btn-secondary btn-lg">Louer du matos</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__inner">
+      <div class="footer__brand">
+        <img src="../img/loop-Logo.png" alt="LOOP" class="footer__logo" />
+        <p>Tout le sport. Une seule boucle.<br>Location de matériel sportif en France.</p>
+      </div>
+      <div class="footer__col">
+        <h5>Location</h5>
+        <ul>
+          <li><a href="#">Paddle & kayak</a></li>
+          <li><a href="#">Vélo & VTT</a></li>
+          <li><a href="#">Ski & snowboard</a></li>
+          <li><a href="#">Surf & bodyboard</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h5>Destinations</h5>
+        <ul>
+          <li><a href="#">Annecy</a></li>
+          <li><a href="#">Chamonix</a></li>
+          <li><a href="#">Savoie</a></li>
+          <li><a href="#">Lacanau</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h5>LOOP</h5>
+        <ul>
+          <li><a href="espace-pro.html">Espace Pro</a></li>
+          <li><a href="#">Notre histoire</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">CGU & Mentions</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© 2026 LOOP Sport Rent — Tous droits réservés</span>
+      <span>🔁 Tout le sport. Une seule boucle.</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

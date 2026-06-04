@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Espace Pro — LOOP Sport Rent</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/loop.css" />
+  <style>
+    /* Hero */
+    .pro-hero {
+      background: var(--bg-dark);
+      padding: 80px 0 72px;
+      position: relative; overflow: hidden;
+    }
+    .pro-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 70% at 80% 50%, rgba(212,228,74,0.07) 0%, transparent 70%);
+    }
+    .pro-hero__inner {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
+      align-items: center; position: relative; z-index: 1;
+    }
+    .pro-hero__tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(212,228,74,0.15); color: var(--primary);
+      font-size: 12px; font-weight: 700; font-family: var(--font-display);
+      padding: 6px 14px; border-radius: 100px;
+      border: 1px solid rgba(212,228,74,0.3);
+      margin-bottom: 20px; letter-spacing: 0.05em; text-transform: uppercase;
+    }
+    .pro-hero h1 { font-family: var(--font-display); font-weight: 800; font-size: 46px; color: var(--text-on-dark); line-height: 1.1; margin-bottom: 16px; }
+    .pro-hero h1 em { font-style: normal; color: var(--primary); }
+    .pro-hero p { font-size: 17px; color: rgba(245,243,238,0.55); line-height: 1.7; margin-bottom: 32px; }
+    .pro-hero__ctas { display: flex; gap: 14px; flex-wrap: wrap; }
+
+    /* Stats band */
+    .stats-band { background: var(--primary); padding: 32px 0; }
+    .stats-band__inner { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; }
+    .stat-item { text-align: center; padding: 0 24px; border-right: 1px solid rgba(28,43,30,0.15); }
+    .stat-item:last-child { border-right: none; }
+    .stat-item__val { font-family: var(--font-display); font-weight: 800; font-size: 36px; color: var(--text); }
+    .stat-item__label { font-size: 13px; color: rgba(28,43,30,0.6); margin-top: 2px; }
+
+    /* Why join */
+    .benefit-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .benefit-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg);
+      padding: 28px; transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .benefit-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-4px); }
+    .benefit-card__icon { font-size: 32px; margin-bottom: 14px; }
+    .benefit-card__title { font-family: var(--font-display); font-weight: 700; font-size: 17px; margin-bottom: 8px; }
+    .benefit-card__desc { font-size: 14px; color: var(--text-muted); line-height: 1.7; }
+
+    /* How it works */
+    .pro-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; position: relative; }
+    .pro-steps::before {
+      content: '';
+      position: absolute; top: 27px; left: calc(12.5% + 20px); right: calc(12.5% + 20px);
+      height: 2px; background: var(--border); z-index: 0;
+    }
+    .pro-step { text-align: center; position: relative; z-index: 1; }
+    .pro-step__num {
+      width: 54px; height: 54px; border-radius: 50%;
+      background: var(--primary); color: var(--text);
+      font-family: var(--font-display); font-weight: 800; font-size: 20px;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 16px; border: 3px solid var(--bg);
+    }
+    .pro-step__title { font-family: var(--font-display); font-weight: 700; font-size: 15px; margin-bottom: 6px; }
+    .pro-step__desc { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+
+    /* Pricing */
+    .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .pricing-card {
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: var(--radius-xl); padding: 36px 28px;
+      display: flex; flex-direction: column; transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .pricing-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-4px); }
+    .pricing-card--featured {
+      border-color: var(--primary); background: var(--bg-dark);
+      position: relative;
+    }
+    .pricing-card__badge {
+      position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
+      background: var(--primary); color: var(--text);
+      font-size: 11px; font-weight: 700; font-family: var(--font-display);
+      padding: 5px 16px; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.05em;
+      white-space: nowrap;
+    }
+    .pricing-card__plan { font-family: var(--font-display); font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 8px; }
+    .pricing-card--featured .pricing-card__plan { color: rgba(245,243,238,0.5); }
+    .pricing-card__price { font-family: var(--font-display); font-weight: 800; font-size: 40px; margin-bottom: 4px; }
+    .pricing-card--featured .pricing-card__price { color: var(--primary); }
+    .pricing-card__price small { font-size: 14px; font-weight: 400; color: var(--text-muted); }
+    .pricing-card--featured .pricing-card__price small { color: rgba(245,243,238,0.4); }
+    .pricing-card__desc { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; line-height: 1.6; }
+    .pricing-card--featured .pricing-card__desc { color: rgba(245,243,238,0.5); }
+    .pricing-card__features { list-style: none; display: flex; flex-direction: column; gap: 10px; flex: 1; margin-bottom: 28px; }
+    .pricing-card__features li { display: flex; align-items: flex-start; gap: 8px; font-size: 14px; line-height: 1.5; }
+    .pricing-card__features li::before { content: '✓'; font-weight: 700; color: var(--primary); flex-shrink: 0; margin-top: 1px; }
+    .pricing-card--featured .pricing-card__features li { color: rgba(245,243,238,0.75); }
+
+    /* Testimonials pro */
+    .pro-testimonials { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .pro-testimonial { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; }
+    .pro-testimonial__text { font-size: 14px; line-height: 1.7; color: var(--text); margin-bottom: 16px; font-style: italic; }
+    .pro-testimonial__author { display: flex; align-items: center; gap: 10px; }
+    .pro-testimonial__avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--primary); color: var(--text); font-family: var(--font-display); font-weight: 700; font-size: 15px; display: flex; align-items: center; justify-content: center; }
+    .pro-testimonial__name { font-weight: 600; font-size: 14px; }
+    .pro-testimonial__role { font-size: 12px; color: var(--text-muted); }
+
+    /* Form section */
+    .form-section {
+      background: var(--bg-dark); border-radius: var(--radius-xl);
+      padding: 56px; display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start;
+    }
+    .form-section__title { font-family: var(--font-display); font-weight: 800; font-size: 32px; color: var(--text-on-dark); line-height: 1.2; margin-bottom: 12px; }
+    .form-section__title em { font-style: normal; color: var(--primary); }
+    .form-section__desc { font-size: 15px; color: rgba(245,243,238,0.5); line-height: 1.7; margin-bottom: 24px; }
+    .form-section__checklist { display: flex; flex-direction: column; gap: 10px; }
+    .form-section__checklist li { display: flex; align-items: center; gap: 10px; font-size: 14px; color: rgba(245,243,238,0.7); }
+    .form-section__checklist li::before { content: '✓'; color: var(--primary); font-weight: 700; }
+
+    .contact-form { display: flex; flex-direction: column; gap: 16px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group label { font-size: 12px; font-weight: 700; font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.06em; color: rgba(245,243,238,0.5); }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-md); padding: 12px 16px;
+      font-size: 14px; font-family: var(--font-body); color: var(--text-on-dark);
+      outline: none; transition: border-color 0.2s;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus { border-color: var(--primary); }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: rgba(245,243,238,0.25); }
+    .form-group select option { background: var(--bg-dark); }
+    .form-group textarea { resize: vertical; min-height: 100px; }
+
+    /* Pro card visual */
+    .pro-card-visual {
+      background: var(--bg-mid); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius-lg); overflow: hidden;
+    }
+    .pro-card-visual img { width: 100%; height: 200px; object-fit: cover; display: block; }
+    .pro-card-visual__body { padding: 20px; }
+    .pro-card-visual__name { font-family: var(--font-display); font-weight: 700; font-size: 16px; color: var(--text-on-dark); margin-bottom: 4px; }
+    .pro-card-visual__sport { font-size: 12px; color: rgba(245,243,238,0.45); margin-bottom: 14px; }
+    .pro-card-visual__stats { display: flex; gap: 16px; }
+    .pro-card-visual__stat { font-size: 13px; color: rgba(245,243,238,0.6); }
+    .pro-card-visual__stat strong { display: block; font-family: var(--font-display); font-weight: 700; font-size: 18px; color: var(--primary); }
+
+    @media (max-width: 960px) {
+      .pro-hero__inner { grid-template-columns: 1fr; }
+      .benefit-grid { grid-template-columns: 1fr; }
+      .pro-steps { grid-template-columns: repeat(2, 1fr); }
+      .pro-steps::before { display: none; }
+      .pricing-grid { grid-template-columns: 1fr; }
+      .pro-testimonials { grid-template-columns: 1fr; }
+      .form-section { grid-template-columns: 1fr; padding: 32px; }
+      .form-row { grid-template-columns: 1fr; }
+      .stats-band__inner { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+      .stat-item { border-right: none; border-bottom: 1px solid rgba(28,43,30,0.15); padding-bottom: 16px; }
+      .stat-item:last-child { border-bottom: none; }
+      .pro-hero h1 { font-size: 32px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════ HEADER ═══════════════ -->
+<header class="header">
+  <div class="container header__inner">
+    <a href="index.html" class="logo">
+      <img src="../img/loop-Logo.png" alt="LOOP Sport Rent" class="logo__img" />
+    </a>
+    <nav class="nav">
+      <a href="louer-du-matos.html">Louer du matos</a>
+      <a href="activites.html">Activités</a>
+      <a href="destinations.html">Destinations</a>
+      <a href="espace-pro.html" style="color:var(--primary)">Espace Pro</a>
+    </nav>
+    <div class="header__actions">
+      <button class="btn-link">Se connecter</button>
+      <a href="#rejoindre" class="btn btn-primary btn-sm">Devenir partenaire</a>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════ PRO HERO ═══════════════ -->
+<section class="pro-hero">
+  <div class="container pro-hero__inner">
+    <div>
+      <div class="pro-hero__tag">🤝 Espace partenaires</div>
+      <h1>Développe ton activité.<br><em>LOOP s'occupe du reste.</em></h1>
+      <p>Tu es moniteur, guide, loueur de matériel ou centre sportif ? Rejoins le réseau LOOP et accède à des milliers de clients qualifiés, sans commission abusive.</p>
+      <div class="pro-hero__ctas">
+        <a href="#rejoindre" class="btn btn-primary btn-lg">Devenir partenaire LOOP</a>
+        <a href="#comment" class="btn btn-secondary btn-lg">Comment ça marche</a>
+      </div>
+    </div>
+    <div class="pro-card-visual">
+      <img src="../img/loop-runners.jpg" alt="Pro LOOP" />
+      <div class="pro-card-visual__body">
+        <div class="pro-card-visual__name">Marc D. — Guide montagne</div>
+        <div class="pro-card-visual__sport">⛰ Chamonix · Certifié LOOP depuis 2024</div>
+        <div class="pro-card-visual__stats">
+          <div class="pro-card-visual__stat"><strong>3 200 €</strong>CA ce mois</div>
+          <div class="pro-card-visual__stat"><strong>47</strong>réservations</div>
+          <div class="pro-card-visual__stat"><strong>4,9⭐</strong>note</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ STATS ═══════════════ -->
+<div class="stats-band">
+  <div class="container stats-band__inner">
+    <div class="stat-item">
+      <div class="stat-item__val">150+</div>
+      <div class="stat-item__label">pros partenaires actifs</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-item__val">2 000+</div>
+      <div class="stat-item__label">réservations par mois</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-item__val">4,9⭐</div>
+      <div class="stat-item__label">note moyenne des pros</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-item__val">0€</div>
+      <div class="stat-item__label">frais d'inscription</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ BENEFITS ═══════════════ -->
+<section class="section">
+  <div class="container">
+    <div class="section__head">
+      <h2 class="section-title">Pourquoi rejoindre LOOP ?</h2>
+      <p class="section-subtitle">On te donne les outils. Tu te concentres sur ton métier.</p>
+    </div>
+    <div class="benefit-grid">
+      <div class="benefit-card">
+        <div class="benefit-card__icon">📈</div>
+        <div class="benefit-card__title">Plus de visibilité, moins d'effort</div>
+        <p class="benefit-card__desc">Ton profil est mis en avant auprès de milliers de sportifs actifs. Tu n'as plus à gérer ta communication — LOOP t'amène les clients.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-card__icon">💳</div>
+        <div class="benefit-card__title">Paiement rapide et sécurisé</div>
+        <p class="benefit-card__desc">Tes revenus sont versés sous 48h après chaque session. Pas de délais, pas de mauvaises surprises. Tableau de bord en temps réel.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-card__icon">🛡</div>
+        <div class="benefit-card__title">Assurance incluse pour toi aussi</div>
+        <p class="benefit-card__desc">Chaque bundle LOOP couvre le client ET le prestataire. Responsabilité civile professionnelle incluse dans ton abonnement.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-card__icon">📅</div>
+        <div class="benefit-card__title">Agenda et disponibilités simplifiés</div>
+        <p class="benefit-card__desc">Un calendrier synchronisé, des créneaux que tu définis, des confirmations automatiques. Tu ne gères plus les allers-retours par SMS.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-card__icon">⭐</div>
+        <div class="benefit-card__title">Système d'avis bilatéral</div>
+        <p class="benefit-card__desc">Tu notes tes clients, tes clients te notent. Un système équitable qui filtre les mauvais comportements et valorise les pros sérieux.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-card__icon">🎯</div>
+        <div class="benefit-card__title">Commission transparente</div>
+        <p class="benefit-card__desc">15% seulement sur chaque réservation — pas de frais cachés, pas d'abonnement obligatoire pour commencer. Tu paies quand tu gagnes.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ HOW IT WORKS ═══════════════ -->
+<section class="section section--alt" id="comment">
+  <div class="container">
+    <div class="section__head">
+      <h2 class="section-title">Rejoindre LOOP en 4 étapes</h2>
+      <p class="section-subtitle">De l'inscription à ta première réservation — en moins de 48h.</p>
+    </div>
+    <div class="pro-steps">
+      <div class="pro-step">
+        <div class="pro-step__num">1</div>
+        <div class="pro-step__title">Tu candidatures</div>
+        <p class="pro-step__desc">Remplis le formulaire ci-dessous. On vérifie ton profil et tes certifications sous 24h.</p>
+      </div>
+      <div class="pro-step">
+        <div class="pro-step__num">2</div>
+        <div class="pro-step__title">On configure ton profil</div>
+        <p class="pro-step__desc">Notre équipe crée ta fiche partenaire, prend tes photos si besoin et publie tes offres.</p>
+      </div>
+      <div class="pro-step">
+        <div class="pro-step__num">3</div>
+        <div class="pro-step__title">Tu reçois des réservations</div>
+        <p class="pro-step__desc">Les clients trouvent ton offre, réservent et paient en ligne. Tu reçois une notification immédiate.</p>
+      </div>
+      <div class="pro-step">
+        <div class="pro-step__num">4</div>
+        <div class="pro-step__title">Tu es payé en 48h</div>
+        <p class="pro-step__desc">Après chaque session validée, le virement est automatique. Commission déduite, transparent.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ PRICING ═══════════════ -->
+<section class="section">
+  <div class="container">
+    <div class="section__head">
+      <h2 class="section-title">Des offres pour chaque profil</h2>
+      <p class="section-subtitle">Commence gratuitement. Évolue quand tu veux.</p>
+    </div>
+    <div class="pricing-grid">
+
+      <div class="pricing-card">
+        <div class="pricing-card__plan">Starter</div>
+        <div class="pricing-card__price">0 €<small>/mois</small></div>
+        <p class="pricing-card__desc">Pour tester LOOP sans engagement. Parfait pour démarrer.</p>
+        <ul class="pricing-card__features">
+          <li>1 offre publiée</li>
+          <li>Commission 20% par réservation</li>
+          <li>Paiement sous 72h</li>
+          <li>Fiche partenaire basique</li>
+          <li>Support par email</li>
+        </ul>
+        <a href="#rejoindre" class="btn btn-secondary btn-md">Commencer gratuitement</a>
+      </div>
+
+      <div class="pricing-card pricing-card--featured">
+        <div class="pricing-card__badge">⚡ Le plus populaire</div>
+        <div class="pricing-card__plan">Pro</div>
+        <div class="pricing-card__price">49 €<small>/mois</small></div>
+        <p class="pricing-card__desc">Pour les pros actifs qui veulent maximiser leur CA sur LOOP.</p>
+        <ul class="pricing-card__features">
+          <li>Offres illimitées</li>
+          <li>Commission 15% seulement</li>
+          <li>Paiement sous 48h</li>
+          <li>Fiche partenaire premium + photos</li>
+          <li>Mise en avant dans les résultats</li>
+          <li>Assurance RC pro incluse</li>
+          <li>Dashboard analytics complet</li>
+          <li>Support prioritaire 7j/7</li>
+        </ul>
+        <a href="#rejoindre" class="btn btn-primary btn-md">Devenir partenaire Pro</a>
+      </div>
+
+      <div class="pricing-card">
+        <div class="pricing-card__plan">Business</div>
+        <div class="pricing-card__price">Sur devis</div>
+        <p class="pricing-card__desc">Pour les centres sportifs, loueurs multi-sites ou groupes.</p>
+        <ul class="pricing-card__features">
+          <li>Tout le plan Pro</li>
+          <li>Commission négociée</li>
+          <li>Accès API & intégrations</li>
+          <li>Gestion multi-utilisateurs</li>
+          <li>Account manager dédié</li>
+          <li>Contrat sur-mesure</li>
+        </ul>
+        <a href="#rejoindre" class="btn btn-secondary btn-md">Nous contacter</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ TESTIMONIALS PRO ═══════════════ -->
+<section class="section section--alt">
+  <div class="container">
+    <div class="section__head">
+      <h2 class="section-title">Ce que disent nos partenaires</h2>
+    </div>
+    <div class="pro-testimonials">
+      <div class="pro-testimonial">
+        <p class="pro-testimonial__text">"Depuis que je suis sur LOOP, j'ai doublé mes réservations en été. Le système de paiement est ultra fiable et le support répond en quelques heures."</p>
+        <div class="pro-testimonial__author">
+          <div class="pro-testimonial__avatar">S</div>
+          <div>
+            <div class="pro-testimonial__name">Sophie M.</div>
+            <div class="pro-testimonial__role">Monitrice paddle — Annecy ⭐ 4,9</div>
+          </div>
+        </div>
+      </div>
+      <div class="pro-testimonial">
+        <p class="pro-testimonial__text">"L'assurance incluse m'a convaincu dès le départ. Plus besoin de gérer ça séparément avec mes clients — tout est dans le bundle LOOP."</p>
+        <div class="pro-testimonial__author">
+          <div class="pro-testimonial__avatar">A</div>
+          <div>
+            <div class="pro-testimonial__name">Antoine R.</div>
+            <div class="pro-testimonial__role">Guide parapente — Chamonix ⭐ 5,0</div>
+          </div>
+        </div>
+      </div>
+      <div class="pro-testimonial">
+        <p class="pro-testimonial__text">"On a intégré nos 3 centres de surf sur LOOP en Business. La commission négociée et l'API ont changé notre façon de gérer les saisons."</p>
+        <div class="pro-testimonial__author">
+          <div class="pro-testimonial__avatar">L</div>
+          <div>
+            <div class="pro-testimonial__name">Lucas B.</div>
+            <div class="pro-testimonial__role">Directeur surf school — Lacanau ⭐ 4,8</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FORM ═══════════════ -->
+<section class="section" id="rejoindre">
+  <div class="container">
+    <div class="form-section">
+      <div>
+        <h2 class="form-section__title">Rejoins<br><em>le réseau LOOP.</em></h2>
+        <p class="form-section__desc">Remplis le formulaire et notre équipe te contacte sous 24h pour lancer ton profil partenaire.</p>
+        <ul class="form-section__checklist">
+          <li>Inscription gratuite, sans engagement</li>
+          <li>Profil en ligne en moins de 48h</li>
+          <li>Première réservation dès le lancement</li>
+          <li>Support dédié pour ton onboarding</li>
+          <li>Accès à la communauté LOOP Pro</li>
+        </ul>
+      </div>
+      <form class="contact-form" onsubmit="return false">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Prénom</label>
+            <input type="text" placeholder="Marc" />
+          </div>
+          <div class="form-group">
+            <label>Nom</label>
+            <input type="text" placeholder="Dupont" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email professionnel</label>
+          <input type="email" placeholder="marc@monactivite.fr" />
+        </div>
+        <div class="form-group">
+          <label>Téléphone</label>
+          <input type="tel" placeholder="+33 6 12 34 56 78" />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Type d'activité</label>
+            <select>
+              <option value="">Sélectionner…</option>
+              <option>Paddle / Kayak</option>
+              <option>Parapente</option>
+              <option>Randonnée / Alpinisme</option>
+              <option>Surf / Bodyboard</option>
+              <option>Ski / Snowboard</option>
+              <option>Vélo / VTT</option>
+              <option>Autre</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Destination principale</label>
+            <select>
+              <option value="">Sélectionner…</option>
+              <option>Annecy</option>
+              <option>Chamonix</option>
+              <option>Lacanau</option>
+              <option>Savoie</option>
+              <option>Autre</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Parle-nous de ton activité</label>
+          <textarea placeholder="Décris ton activité, tes certifications, ton matériel…"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg" style="width:100%; justify-content:center">
+          🚀 Envoyer ma candidature
+        </button>
+        <p style="font-size:12px; color:rgba(245,243,238,0.3); text-align:center; margin-top:8px">Réponse garantie sous 24h · Sans engagement</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__inner">
+      <div class="footer__brand">
+        <img src="../img/loop-Logo.png" alt="LOOP" class="footer__logo" />
+        <p>Tout le sport. Une seule boucle.<br>Location de matériel sportif en France.</p>
+      </div>
+      <div class="footer__col">
+        <h5>Location</h5>
+        <ul>
+          <li><a href="#">Paddle & kayak</a></li>
+          <li><a href="#">Vélo & VTT</a></li>
+          <li><a href="#">Ski & snowboard</a></li>
+          <li><a href="#">Surf & bodyboard</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h5>Destinations</h5>
+        <ul>
+          <li><a href="destinations.html">Annecy</a></li>
+          <li><a href="destinations.html">Chamonix</a></li>
+          <li><a href="destinations.html">Savoie</a></li>
+          <li><a href="destinations.html">Lacanau</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h5>LOOP</h5>
+        <ul>
+          <li><a href="espace-pro.html">Espace Pro</a></li>
+          <li><a href="#">Notre histoire</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">CGU & Mentions</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© 2026 LOOP Sport Rent — Tous droits réservés</span>
+      <span>🔁 Tout le sport. Une seule boucle.</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
