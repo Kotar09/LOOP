@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Réservation — LOOP Sport Rent</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/loop.css" />
+  <style>
+
+    /* ── Page layout ── */
+    .resa-page {
+      background: var(--bg);
+      min-height: 100vh;
+      padding: 40px 0 80px;
+    }
+
+    /* ── Progress bar ── */
+    .progress-bar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0;
+      position: sticky; top: 70px; z-index: 50;
+    }
+    .progress-bar__inner {
+      display: flex;
+      align-items: stretch;
+      height: 60px;
+    }
+    .progress-step {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: var(--font-display);
+      color: var(--text-muted);
+      border-bottom: 3px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+    }
+    .progress-step + .progress-step::before {
+      content: '';
+      position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+      height: 40%; width: 1px; background: var(--border);
+    }
+    .progress-step.done {
+      color: var(--text);
+      border-bottom-color: var(--primary);
+    }
+    .progress-step.active {
+      color: var(--text);
+      border-bottom-color: var(--primary);
+      background: rgba(212,228,74,0.05);
+    }
+    .progress-step__num {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: var(--border); color: var(--text-muted);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 800; flex-shrink: 0;
+      transition: all 0.2s;
+    }
+    .progress-step.done .progress-step__num,
+    .progress-step.active .progress-step__num {
+      background: var(--primary); color: var(--text);
+    }
+    .progress-step.done .progress-step__num::after { content: '✓'; }
+
+    /* ── Main layout ── */
+    .resa-layout {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 32px;
+      align-items: start;
+    }
+
+    /* ── Cards ── */
+    .resa-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    .resa-card__head {
+      padding: 24px 28px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 12px;
+    }
+    .resa-card__icon {
+      width: 40px; height: 40px; border-radius: var(--radius-md);
+      background: rgba(212,228,74,0.15);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .resa-card__title {
+      font-family: var(--font-display);
+      font-weight: 700; font-size: 17px;
+    }
+    .resa-card__subtitle { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+    .resa-card__body { padding: 28px; }
+
+    /* ── Steps ── */
+    .step-panel { display: none; }
+    .step-panel.active { display: block; }
+
+    /* ── Bundle selector ── */
+    .bundle-selector { display: flex; flex-direction: column; gap: 14px; }
+    .bundle-option {
+      display: flex; align-items: center; gap: 16px;
+      padding: 16px 20px;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-lg);
+      cursor: pointer;
+      transition: all 0.2s;
+      background: var(--bg);
+    }
+    .bundle-option:hover { border-color: var(--primary); background: rgba(212,228,74,0.04); }
+    .bundle-option.selected { border-color: var(--primary); background: rgba(212,228,74,0.07); }
+    .bundle-option__img {
+      width: 80px; height: 60px; border-radius: var(--radius-md);
+      overflow: hidden; flex-shrink: 0;
+    }
+    .bundle-option__img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .bundle-option__info { flex: 1; }
+    .bundle-option__name { font-family: var(--font-display); font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+    .bundle-option__meta { font-size: 12px; color: var(--text-muted); display: flex; gap: 10px; flex-wrap: wrap; }
+    .bundle-option__price {
+      font-family: var(--font-display); font-weight: 800; font-size: 18px;
+      white-space: nowrap; flex-shrink: 0;
+    }
+    .bundle-option__price small { font-size: 11px; font-weight: 400; color: var(--text-muted); }
+    .bundle-option__radio {
+      width: 20px; height: 20px; border-radius: 50%;
+      border: 2px solid var(--border); flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    .bundle-option.selected .bundle-option__radio {
+      border-color: var(--primary); background: var(--primary);
+    }
+    .bundle-option.selected .bundle-option__radio::after {
+      content: ''; width: 8px; height: 8px; border-radius: 50%;
+      background: var(--text);
+    }
+
+    /* ── Date & slot picker ── */
+    .calendar-grid {
+      display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px;
+      margin-bottom: 24px;
+    }
+    .cal-header { text-align: center; font-size: 11px; font-weight: 700; font-family: var(--font-display); color: var(--text-muted); padding: 6px 0; text-transform: uppercase; letter-spacing: 0.06em; }
+    .cal-day {
+      aspect-ratio: 1;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 500; border-radius: var(--radius-md);
+      cursor: pointer; transition: all 0.15s; position: relative;
+    }
+    .cal-day:hover:not(.disabled):not(.empty) { background: rgba(212,228,74,0.2); }
+    .cal-day.selected { background: var(--primary); font-weight: 700; color: var(--text); }
+    .cal-day.today { border: 1.5px solid var(--primary); }
+    .cal-day.disabled { color: var(--border); cursor: not-allowed; }
+    .cal-day.empty { cursor: default; }
+    .cal-day.has-slot::after {
+      content: '';
+      position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%);
+      width: 4px; height: 4px; border-radius: 50%;
+      background: var(--primary);
+    }
+    .cal-day.selected::after { background: var(--text); }
+
+    .cal-nav {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .cal-nav__btn {
+      width: 32px; height: 32px; border-radius: var(--radius-md);
+      border: 1.5px solid var(--border); background: var(--surface);
+      cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    .cal-nav__btn:hover { border-color: var(--primary); background: rgba(212,228,74,0.1); }
+    .cal-nav__month { font-family: var(--font-display); font-weight: 700; font-size: 15px; }
+
+    .slots-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .slot-btn {
+      padding: 10px; border-radius: var(--radius-md);
+      border: 1.5px solid var(--border); background: var(--bg);
+      text-align: center; cursor: pointer; transition: all 0.2s;
+    }
+    .slot-btn:hover:not(.full) { border-color: var(--primary); background: rgba(212,228,74,0.06); }
+    .slot-btn.selected { border-color: var(--primary); background: rgba(212,228,74,0.12); }
+    .slot-btn.full { opacity: 0.4; cursor: not-allowed; text-decoration: line-through; }
+    .slot-btn__time { font-family: var(--font-display); font-weight: 700; font-size: 14px; }
+    .slot-btn__spots { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .slot-btn.selected .slot-btn__spots { color: var(--text); }
+
+    .duration-selector { display: flex; gap: 10px; flex-wrap: wrap; }
+    .duration-btn {
+      padding: 10px 20px; border-radius: var(--radius-md);
+      border: 1.5px solid var(--border); background: var(--bg);
+      font-family: var(--font-display); font-weight: 600; font-size: 14px;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .duration-btn:hover { border-color: var(--primary); }
+    .duration-btn.selected { border-color: var(--primary); background: rgba(212,228,74,0.12); }
+
+    /* ── Participants ── */
+    .participants-section { display: flex; flex-direction: column; gap: 16px; }
+    .participant-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 20px; background: var(--bg); border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+    }
+    .participant-row__info h4 { font-family: var(--font-display); font-weight: 700; font-size: 15px; }
+    .participant-row__info p { font-size: 12px; color: var(--text-muted); }
+    .counter {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .counter__btn {
+      width: 34px; height: 34px; border-radius: 50%;
+      border: 1.5px solid var(--border); background: var(--surface);
+      font-size: 18px; font-weight: 700; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s; line-height: 1;
+    }
+    .counter__btn:hover { border-color: var(--primary); background: rgba(212,228,74,0.1); }
+    .counter__val { font-family: var(--font-display); font-weight: 800; font-size: 20px; min-width: 28px; text-align: center; }
+
+    /* Options extras */
+    .extras-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .extra-option {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 16px; border-radius: var(--radius-lg);
+      border: 1.5px solid var(--border); background: var(--bg);
+      cursor: pointer; transition: all 0.2s;
+    }
+    .extra-option:hover { border-color: var(--primary); }
+    .extra-option.selected { border-color: var(--primary); background: rgba(212,228,74,0.07); }
+    .extra-option__check {
+      width: 20px; height: 20px; border-radius: var(--radius-sm);
+      border: 2px solid var(--border); flex-shrink: 0; margin-top: 1px;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    .extra-option.selected .extra-option__check {
+      background: var(--primary); border-color: var(--primary);
+    }
+    .extra-option.selected .extra-option__check::after { content: '✓'; font-size: 12px; font-weight: 700; }
+    .extra-option__info h5 { font-family: var(--font-display); font-weight: 700; font-size: 14px; margin-bottom: 3px; }
+    .extra-option__info p { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+    .extra-option__price { font-family: var(--font-display); font-weight: 700; font-size: 14px; margin-left: auto; flex-shrink: 0; }
+
+    /* ── Info perso ── */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-group label { font-size: 12px; font-weight: 700; font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      border: 1.5px solid var(--border); border-radius: var(--radius-md);
+      padding: 12px 16px; font-size: 14px; font-family: var(--font-body);
+      color: var(--text); background: var(--bg); outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus { border-color: var(--primary); }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+
+    .level-grid { display: flex; gap: 10px; flex-wrap: wrap; }
+    .level-btn {
+      padding: 8px 18px; border-radius: 100px;
+      border: 1.5px solid var(--border); background: var(--bg);
+      font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s;
+    }
+    .level-btn:hover { border-color: var(--primary); }
+    .level-btn.selected { background: var(--primary); border-color: var(--primary); }
+
+    /* ── Payment ── */
+    .payment-methods { display: flex; gap: 10px; margin-bottom: 24px; flex-wrap: wrap; }
+    .pay-method {
+      flex: 1; min-width: 120px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 14px 16px; border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg); background: var(--bg);
+      cursor: pointer; transition: all 0.2s;
+      font-size: 14px; font-weight: 600; font-family: var(--font-display);
+    }
+    .pay-method:hover { border-color: var(--primary); }
+    .pay-method.selected { border-color: var(--primary); background: rgba(212,228,74,0.07); }
+    .pay-method__icon { font-size: 20px; }
+
+    .card-form { display: grid; grid-template-columns: 1fr; gap: 14px; }
+    .card-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .card-input-wrap { position: relative; }
+    .card-input-wrap input {
+      border: 1.5px solid var(--border); border-radius: var(--radius-md);
+      padding: 12px 16px 12px 48px; font-size: 14px; font-family: var(--font-body);
+      color: var(--text); background: var(--bg); outline: none; width: 100%;
+      transition: border-color 0.2s;
+    }
+    .card-input-wrap input:focus { border-color: var(--primary); }
+    .card-input-wrap .card-icon {
+      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+      font-size: 16px; color: var(--text-muted);
+    }
+    .card-input-simple {
+      border: 1.5px solid var(--border); border-radius: var(--radius-md);
+      padding: 12px 16px; font-size: 14px; font-family: var(--font-body);
+      color: var(--text); background: var(--bg); outline: none; width: 100%;
+      transition: border-color 0.2s;
+    }
+    .card-input-simple:focus { border-color: var(--primary); }
+
+    .security-info {
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(76,175,80,0.08); border: 1px solid rgba(76,175,80,0.2);
+      border-radius: var(--radius-md); padding: 12px 16px;
+      font-size: 13px; color: #2e7d32; margin-top: 8px;
+    }
+
+    /* ── Confirmation ── */
+    .confirm-screen {
+      text-align: center; padding: 48px 32px;
+    }
+    .confirm-icon {
+      width: 80px; height: 80px; border-radius: 50%;
+      background: var(--primary); color: var(--text);
+      font-size: 36px; display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 24px;
+    }
+    .confirm-title { font-family: var(--font-display); font-weight: 800; font-size: 28px; margin-bottom: 10px; }
+    .confirm-sub { font-size: 16px; color: var(--text-muted); margin-bottom: 32px; }
+    .confirm-ref {
+      display: inline-block;
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: var(--radius-md); padding: 10px 24px;
+      font-family: var(--font-display); font-weight: 700; font-size: 18px;
+      letter-spacing: 0.08em; margin-bottom: 32px;
+    }
+    .confirm-details { display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; text-align: left; }
+    .confirm-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 12px 16px; background: var(--bg); border-radius: var(--radius-md);
+      border: 1px solid var(--border); font-size: 14px;
+    }
+    .confirm-row__label { color: var(--text-muted); }
+    .confirm-row__val { font-weight: 600; }
+
+    /* ── Sticky summary ── */
+    .summary-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-xl); overflow: hidden;
+      position: sticky; top: 140px;
+    }
+    .summary-card__head {
+      background: var(--bg-dark); padding: 20px 24px;
+    }
+    .summary-card__head h3 { font-family: var(--font-display); font-weight: 700; font-size: 16px; color: var(--text-on-dark); }
+    .summary-img { width: 100%; height: 160px; object-fit: cover; display: block; }
+    .summary-body { padding: 20px 24px; }
+    .summary-bundle-name { font-family: var(--font-display); font-weight: 700; font-size: 16px; margin-bottom: 4px; }
+    .summary-bundle-meta { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; }
+    .summary-divider { height: 1px; background: var(--border); margin: 16px 0; }
+    .summary-line {
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 14px; margin-bottom: 10px;
+    }
+    .summary-line__label { color: var(--text-muted); }
+    .summary-line__val { font-weight: 600; }
+    .summary-line.total {
+      font-size: 17px; padding-top: 12px; margin-top: 4px;
+      border-top: 2px solid var(--border);
+    }
+    .summary-line.total .summary-line__val {
+      font-family: var(--font-display); font-weight: 800; font-size: 22px;
+    }
+    .summary-line.saving .summary-line__val { color: #2ecc71; }
+
+    .summary-guarantees { display: flex; flex-direction: column; gap: 8px; margin: 16px 0; }
+    .summary-guarantee {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 12px; color: var(--text-muted);
+    }
+    .summary-guarantee span:first-child { font-size: 14px; }
+
+    /* ── Nav buttons ── */
+    .step-nav { display: flex; gap: 12px; align-items: center; margin-top: 8px; }
+    .btn-back {
+      background: var(--bg); border: 1.5px solid var(--border);
+      color: var(--text); padding: 12px 24px; border-radius: var(--radius-md);
+      font-family: var(--font-display); font-weight: 700; font-size: 14px;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .btn-back:hover { border-color: var(--primary); }
+
+    /* ── Section labels ── */
+    .sub-section { margin-bottom: 28px; }
+    .sub-section:last-child { margin-bottom: 0; }
+    .sub-section__label {
+      font-family: var(--font-display); font-weight: 700; font-size: 13px;
+      text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-muted);
+      margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+    }
+    .sub-section__label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    /* ── Tags ── */
+    .tag-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+    .info-tag {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: var(--bg); border: 1px solid var(--border);
+      padding: 5px 12px; border-radius: 100px;
+      font-size: 12px; color: var(--text-muted);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 960px) {
+      .resa-layout { grid-template-columns: 1fr; }
+      .summary-card { position: static; }
+      .form-grid { grid-template-columns: 1fr; }
+      .extras-grid { grid-template-columns: 1fr; }
+      .progress-step span.label { display: none; }
+      .card-row { grid-template-columns: 1fr; }
+      .slots-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════ HEADER ═══════════════ -->
+<header class="header">
+  <div class="container header__inner">
+    <a href="index.html" class="logo">
+      <img src="../img/loop-Logo.png" alt="LOOP Sport Rent" class="logo__img" />
+    </a>
+    <nav class="nav">
+      <a href="louer-du-matos.html">Louer du matos</a>
+      <a href="activites.html">Activités</a>
+      <a href="destinations.html">Destinations</a>
+      <a href="espace-pro.html">Espace Pro</a>
+    </nav>
+    <div class="header__actions">
+      <button class="btn-link">Se connecter</button>
+      <a href="reservation.html" class="btn btn-primary btn-sm" style="background:var(--primary)">Réserver</a>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════ PROGRESS BAR ═══════════════ -->
+<div class="progress-bar">
+  <div class="container progress-bar__inner">
+    <div class="progress-step active" id="tab1" onclick="goToStep(1)">
+      <div class="progress-step__num" id="num1">1</div>
+      <span class="label">Choix du bundle</span>
+    </div>
+    <div class="progress-step" id="tab2" onclick="goToStep(2)">
+      <div class="progress-step__num" id="num2">2</div>
+      <span class="label">Date & créneau</span>
+    </div>
+    <div class="progress-step" id="tab3" onclick="goToStep(3)">
+      <div class="progress-step__num" id="num3">3</div>
+      <span class="label">Participants</span>
+    </div>
+    <div class="progress-step" id="tab4" onclick="goToStep(4)">
+      <div class="progress-step__num" id="num4">4</div>
+      <span class="label">Vos infos</span>
+    </div>
+    <div class="progress-step" id="tab5" onclick="goToStep(5)">
+      <div class="progress-step__num" id="num5">5</div>
+      <span class="label">Paiement</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ MAIN ═══════════════ -->
+<div class="resa-page">
+  <div class="container">
+    <div class="resa-layout">
+
+      <!-- LEFT COLUMN — Steps -->
+      <div>
+
+        <!-- ── STEP 1 : Choix du bundle ── -->
+        <div class="step-panel active" id="step1">
+          <div class="resa-card">
+            <div class="resa-card__head">
+              <div class="resa-card__icon">⚡</div>
+              <div>
+                <div class="resa-card__title">Choisir ton bundle</div>
+                <div class="resa-card__subtitle">Activité + matériel + assurance en une seule réservation</div>
+              </div>
+            </div>
+            <div class="resa-card__body">
+
+              <div class="sub-section">
+                <div class="sub-section__label">🛶 Paddle & Eau</div>
+                <div class="bundle-selector">
+                  <div class="bundle-option selected" onclick="selectBundle(this, 'Cours de paddle 2h — Annecy', 75)">
+                    <div class="bundle-option__radio"></div>
+                    <div class="bundle-option__img"><img src="../img/paddle-annecy.png" alt="Paddle" /></div>
+                    <div class="bundle-option__info">
+                      <div class="bundle-option__name">Cours de paddle 2h — Lac d'Annecy</div>
+                      <div class="bundle-option__meta">
+                        <span>⏱ 2h</span><span>📍 Annecy</span><span>🛡 Assurance incluse</span><span>⭐ 4,9</span>
+                      </div>
+                    </div>
+                    <div class="bundle-option__price">75 €<small>/pers</small></div>
+                  </div>
+                  <div class="bundle-option" onclick="selectBundle(this, 'Kayak biplace — Annecy', 28)">
+                    <div class="bundle-option__radio"></div>
+                    <div class="bundle-option__img"><img src="../img/paddle.png" alt="Kayak" /></div>
+                    <div class="bundle-option__info">
+                      <div class="bundle-option__name">Location kayak biplace — Annecy</div>
+                      <div class="bundle-option__meta">
+                        <span>⏱ À la journée</span><span>📍 Annecy</span><span>🛡 Assurance incluse</span><span>⭐ 4,8</span>
+                      </div>
+                    </div>
+                    <div class="bundle-option__price">28 €<small>/jour</small></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="sub-section">
+                <div class="sub-section__label">⛰ Montagne</div>
+                <div class="bundle-selector">
+                  <div class="bundle-option" onclick="selectBundle(this, 'Vol tandem parapente — Chamonix', 120)">
+                    <div class="bundle-option__radio"></div>
+                    <div class="bundle-option__img"><img src="../img/parapente-chamonix.png" alt="Parapente" /></div>
+                    <div class="bundle-option__info">
+                      <div class="bundle-option__name">Vol tandem parapente — Chamonix</div>
+                      <div class="bundle-option__meta">
+                        <span>⏱ 20 min</span><span>📍 Chamonix</span><span>🛡 Assurance incluse</span><span>⭐ 4,8</span>
+                      </div>
+                    </div>
+                    <div class="bundle-option__price">120 €<small>/pers</small></div>
+                  </div>
+                  <div class="bundle-option" onclick="selectBundle(this, 'Rando guidée Lac Blanc — Chamonix', 45)">
+                    <div class="bundle-option__radio"></div>
+                    <div class="bundle-option__img"><img src="../img/rando-montagne.png" alt="Rando" /></div>
+                    <div class="bundle-option__info">
+                      <div class="bundle-option__name">Rando guidée "Lac Blanc" — Chamonix</div>
+                      <div class="bundle-option__meta">
+                        <span>⏱ 6h</span><span>📍 Chamonix</span><span>🛡 Assurance incluse</span><span>⭐ 4,9</span>
+                      </div>
+                    </div>
+                    <div class="bundle-option__price">45 €<small>/pers</small></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="sub-section">
+                <div class="sub-section__label">🌊 Côtier</div>
+                <div class="bundle-selector">
+                  <div class="bundle-option" onclick="selectBundle(this, 'Cours de surf 2h — Lacanau', 55)">
+                    <div class="bundle-option__radio"></div>
+                    <div class="bundle-option__img"><img src="../img/dest-lacanau.jpg" alt="Surf" /></div>
+                    <div class="bundle-option__info">
+                      <div class="bundle-option__name">Cours de surf 2h — Lacanau Océan</div>
+                      <div class="bundle-option__meta">
+                        <span>⏱ 2h</span><span>📍 Lacanau</span><span>🛡 Assurance incluse</span><span>⭐ 4,7</span>
+                      </div>
+                    </div>
+                    <div class="bundle-option__price">55 €<small>/pers</small></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="step-nav">
+                <button class="btn btn-primary btn-md" onclick="nextStep(1)" style="flex:1; justify-content:center">
+                  Continuer — Choisir la date →
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── STEP 2 : Date & créneau ── -->
+        <div class="step-panel" id="step2">
+          <div class="resa-card">
+            <div class="resa-card__head">
+              <div class="resa-card__icon">📅</div>
+              <div>
+                <div class="resa-card__title">Choisir la date</div>
+                <div class="resa-card__subtitle">Sélectionne un jour disponible pour ton activité</div>
+              </div>
+            </div>
+            <div class="resa-card__body">
+              <div class="sub-section">
+                <div class="cal-nav">
+                  <button class="cal-nav__btn" onclick="changeMonth(-1)">‹</button>
+                  <div class="cal-nav__month" id="calMonth">Juin 2026</div>
+                  <button class="cal-nav__btn" onclick="changeMonth(1)">›</button>
+                </div>
+                <div class="calendar-grid" id="calGrid">
+                  <!-- injected by JS -->
+                </div>
+              </div>
+
+              <div class="sub-section">
+                <div class="sub-section__label">⏰ Créneau horaire</div>
+                <div class="slots-grid">
+                  <div class="slot-btn" onclick="selectSlot(this)">
+                    <div class="slot-btn__time">09:00</div>
+                    <div class="slot-btn__spots">5 places dispo</div>
+                  </div>
+                  <div class="slot-btn" onclick="selectSlot(this)">
+                    <div class="slot-btn__time">11:00</div>
+                    <div class="slot-btn__spots">3 places dispo</div>
+                  </div>
+                  <div class="slot-btn full">
+                    <div class="slot-btn__time">13:00</div>
+                    <div class="slot-btn__spots">Complet</div>
+                  </div>
+                  <div class="slot-btn" onclick="selectSlot(this)">
+                    <div class="slot-btn__time">15:00</div>
+                    <div class="slot-btn__spots">7 places dispo</div>
+                  </div>
+                  <div class="slot-btn" onclick="selectSlot(this)">
+                    <div class="slot-btn__time">17:00</div>
+                    <div class="slot-btn__spots">2 places dispo</div>
+                  </div>
+                  <div class="slot-btn full">
+                    <div class="slot-btn__time">19:00</div>
+                    <div class="slot-btn__spots">Complet</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="sub-section">
+                <div class="sub-section__label">📏 Durée</div>
+                <div class="duration-selector">
+                  <div class="duration-btn selected" onclick="selectDuration(this)">1h</div>
+                  <div class="duration-btn" onclick="selectDuration(this)">2h</div>
+                  <div class="duration-btn" onclick="selectDuration(this)">Demi-journée</div>
+                  <div class="duration-btn" onclick="selectDuration(this)">Journée</div>
+                </div>
+              </div>
+
+              <div class="step-nav">
+                <button class="btn-back" onclick="prevStep(2)">← Retour</button>
+                <button class="btn btn-primary btn-md" onclick="nextStep(2)" style="flex:1; justify-content:center">
+                  Continuer — Participants →
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── STEP 3 : Participants & options ── -->
+        <div class="step-panel" id="step3">
+          <div class="resa-card">
+            <div class="resa-card__head">
+              <div class="resa-card__icon">👥</div>
+              <div>
+                <div class="resa-card__title">Participants</div>
+                <div class="resa-card__subtitle">Combien de personnes participent à l'activité ?</div>
+              </div>
+            </div>
+            <div class="resa-card__body">
+              <div class="sub-section">
+                <div class="participants-section">
+                  <div class="participant-row">
+                    <div class="participant-row__info">
+                      <h4>Adultes</h4>
+                      <p>18 ans et plus</p>
+                    </div>
+                    <div class="counter">
+                      <button class="counter__btn" onclick="changeCount('adults', -1)">−</button>
+                      <div class="counter__val" id="adults-count">2</div>
+                      <button class="counter__btn" onclick="changeCount('adults', 1)">+</button>
+                    </div>
+                  </div>
+                  <div class="participant-row">
+                    <div class="participant-row__info">
+                      <h4>Enfants</h4>
+                      <p>8 à 17 ans — tarif réduit</p>
+                    </div>
+                    <div class="counter">
+                      <button class="counter__btn" onclick="changeCount('children', -1)">−</button>
+                      <div class="counter__val" id="children-count">0</div>
+                      <button class="counter__btn" onclick="changeCount('children', 1)">+</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="sub-section">
+                <div class="sub-section__label">✨ Options supplémentaires</div>
+                <div class="extras-grid">
+                  <div class="extra-option" onclick="toggleExtra(this, 8)">
+                    <div class="extra-option__check"></div>
+                    <div class="extra-option__info">
+                      <h5>📸 Photos souvenir</h5>
+                      <p>10 photos HD de ton activité envoyées par email</p>
+                    </div>
+                    <div class="extra-option__price">+8 €</div>
+                  </div>
+                  <div class="extra-option" onclick="toggleExtra(this, 15)">
+                    <div class="extra-option__check"></div>
+                    <div class="extra-option__info">
+                      <h5>🎥 Vidéo GoPro</h5>
+                      <p>Montage vidéo de 2 min de ta session</p>
+                    </div>
+                    <div class="extra-option__price">+15 €</div>
+                  </div>
+                  <div class="extra-option" onclick="toggleExtra(this, 12)">
+                    <div class="extra-option__check"></div>
+                    <div class="extra-option__info">
+                      <h5>🍱 Panier repas</h5>
+                      <p>Repas local préparé par nos partenaires</p>
+                    </div>
+                    <div class="extra-option__price">+12 €</div>
+                  </div>
+                  <div class="extra-option" onclick="toggleExtra(this, 0)">
+                    <div class="extra-option__check"></div>
+                    <div class="extra-option__info">
+                      <h5>🚐 Navette aller-retour</h5>
+                      <p>Depuis le centre-ville — inclus dans ce bundle</p>
+                    </div>
+                    <div class="extra-option__price">Gratuit</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="step-nav">
+                <button class="btn-back" onclick="prevStep(3)">← Retour</button>
+                <button class="btn btn-primary btn-md" onclick="nextStep(3)" style="flex:1; justify-content:center">
+                  Continuer — Vos informations →
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── STEP 4 : Infos personnelles ── -->
+        <div class="step-panel" id="step4">
+          <div class="resa-card">
+            <div class="resa-card__head">
+              <div class="resa-card__icon">👤</div>
+              <div>
+                <div class="resa-card__title">Vos informations</div>
+                <div class="resa-card__subtitle">Nécessaires pour confirmer votre réservation</div>
+              </div>
+            </div>
+            <div class="resa-card__body">
+              <div class="sub-section">
+                <div class="sub-section__label">🪪 Coordonnées</div>
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label>Prénom</label>
+                    <input type="text" placeholder="Marie" />
+                  </div>
+                  <div class="form-group">
+                    <label>Nom</label>
+                    <input type="text" placeholder="Dupont" />
+                  </div>
+                  <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" placeholder="marie@example.fr" />
+                  </div>
+                  <div class="form-group">
+                    <label>Téléphone</label>
+                    <input type="tel" placeholder="+33 6 12 34 56 78" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="sub-section">
+                <div class="sub-section__label">🏋 Niveau sportif</div>
+                <div class="level-grid">
+                  <div class="level-btn" onclick="selectLevel(this)">🌱 Débutant</div>
+                  <div class="level-btn selected" onclick="selectLevel(this)">⚡ Intermédiaire</div>
+                  <div class="level-btn" onclick="selectLevel(this)">🔥 Avancé</div>
+                  <div class="level-btn" onclick="selectLevel(this)">🏆 Expert</div>
+                </div>
+              </div>
+
+              <div class="sub-section">
+                <div class="sub-section__label">📋 Informations complémentaires</div>
+                <div class="form-grid">
+                  <div class="form-group full">
+                    <label>Allergies / restrictions médicales</label>
+                    <textarea placeholder="Indiquez toute information importante pour le guide (allergies, blessures récentes…)"></textarea>
+                  </div>
+                  <div class="form-group full">
+                    <label>Message pour le guide (optionnel)</label>
+                    <textarea placeholder="Questions, demandes particulières…"></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <div class="sub-section">
+                <div class="sub-section__label">📏 Tailles équipement</div>
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label>Pointure chaussures</label>
+                    <select>
+                      <option value="">Sélectionner</option>
+                      <option>38</option><option>39</option><option>40</option>
+                      <option>41</option><option>42</option><option>43</option>
+                      <option>44</option><option>45</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Taille vêtement</label>
+                    <select>
+                      <option value="">Sélectionner</option>
+                      <option>XS</option><option>S</option><option>M</option>
+                      <option>L</option><option>XL</option><option>XXL</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Poids (kg)</label>
+                    <input type="number" placeholder="70" min="30" max="150" />
+                  </div>
+                  <div class="form-group">
+                    <label>Taille (cm)</label>
+                    <input type="number" placeholder="175" min="120" max="220" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="step-nav">
+                <button class="btn-back" onclick="prevStep(4)">← Retour</button>
+                <button class="btn btn-primary btn-md" onclick="nextStep(4)" style="flex:1; justify-content:center">
+                  Continuer — Paiement →
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── STEP 5 : Paiement ── -->
+        <div class="step-panel" id="step5">
+          <div class="resa-card">
+            <div class="resa-card__head">
+              <div class="resa-card__icon">💳</div>
+              <div>
+                <div class="resa-card__title">Paiement sécurisé</div>
+                <div class="resa-card__subtitle">Vos données sont chiffrées et sécurisées</div>
+              </div>
+            </div>
+            <div class="resa-card__body">
+
+              <div class="sub-section">
+                <div class="sub-section__label">💳 Mode de paiement</div>
+                <div class="payment-methods">
+                  <div class="pay-method selected" onclick="selectPayMethod(this)">
+                    <span class="pay-method__icon">💳</span> Carte bancaire
+                  </div>
+                  <div class="pay-method" onclick="selectPayMethod(this)">
+                    <span class="pay-method__icon">🅿️</span> PayPal
+                  </div>
+                  <div class="pay-method" onclick="selectPayMethod(this)">
+                    <span class="pay-method__icon">🍎</span> Apple Pay
+                  </div>
+                  <div class="pay-method" onclick="selectPayMethod(this)">
+                    <span class="pay-method__icon">🔵</span> Google Pay
+                  </div>
+                </div>
+              </div>
+
+              <div class="sub-section" id="card-form-section">
+                <div class="sub-section__label">🔒 Carte bancaire</div>
+                <div class="card-form">
+                  <div class="form-group">
+                    <label>Numéro de carte</label>
+                    <div class="card-input-wrap">
+                      <span class="card-icon">💳</span>
+                      <input type="text" placeholder="1234 5678 9012 3456" maxlength="19"
+                        oninput="formatCard(this)" />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Nom sur la carte</label>
+                    <input class="card-input-simple" type="text" placeholder="MARIE DUPONT" style="text-transform:uppercase" />
+                  </div>
+                  <div class="card-row">
+                    <div class="form-group">
+                      <label>Date d'expiration</label>
+                      <input class="card-input-simple" type="text" placeholder="MM / AA" maxlength="7"
+                        oninput="formatExpiry(this)" />
+                    </div>
+                    <div class="form-group">
+                      <label>CVV</label>
+                      <input class="card-input-simple" type="text" placeholder="•••" maxlength="4" />
+                    </div>
+                  </div>
+                </div>
+                <div class="security-info">
+                  🔒 Paiement sécurisé SSL 256-bit · Conforme PCI DSS · Aucune donnée stockée
+                </div>
+              </div>
+
+              <div class="sub-section">
+                <div class="sub-section__label">📋 Conditions</div>
+                <div style="display:flex; flex-direction:column; gap:10px;">
+                  <label style="display:flex; align-items:flex-start; gap:10px; cursor:pointer; font-size:14px;">
+                    <input type="checkbox" style="accent-color:var(--primary); margin-top:3px; flex-shrink:0;" checked />
+                    <span>J'accepte les <a href="#" style="color:var(--primary); font-weight:600;">conditions générales de vente</a> et la <a href="#" style="color:var(--primary); font-weight:600;">politique d'annulation</a> de LOOP.</span>
+                  </label>
+                  <label style="display:flex; align-items:flex-start; gap:10px; cursor:pointer; font-size:14px;">
+                    <input type="checkbox" style="accent-color:var(--primary); margin-top:3px; flex-shrink:0;" checked />
+                    <span>Je confirme avoir lu les informations de sécurité et être apte à pratiquer cette activité.</span>
+                  </label>
+                  <label style="display:flex; align-items:flex-start; gap:10px; cursor:pointer; font-size:14px;">
+                    <input type="checkbox" style="accent-color:var(--primary); margin-top:3px; flex-shrink:0;" />
+                    <span>Je souhaite recevoir les offres LOOP par email (facultatif).</span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="step-nav">
+                <button class="btn-back" onclick="prevStep(5)">← Retour</button>
+                <button class="btn btn-primary btn-lg" onclick="confirmPayment()" style="flex:1; justify-content:center; font-size:16px">
+                  🔒 Payer et confirmer la réservation
+                </button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- ── STEP 6 : Confirmation ── -->
+        <div class="step-panel" id="step6">
+          <div class="resa-card">
+            <div class="resa-card__body">
+              <div class="confirm-screen">
+                <div class="confirm-icon">✓</div>
+                <div class="confirm-title">Réservation confirmée ! 🎉</div>
+                <p class="confirm-sub">Un email de confirmation a été envoyé à <strong>marie@example.fr</strong></p>
+                <div class="confirm-ref" id="confirmRef">LOOP-2026-#47382</div>
+
+                <div class="confirm-details">
+                  <div class="confirm-row">
+                    <span class="confirm-row__label">Bundle</span>
+                    <span class="confirm-row__val" id="confirm-bundle">Cours de paddle 2h — Annecy</span>
+                  </div>
+                  <div class="confirm-row">
+                    <span class="confirm-row__label">Date</span>
+                    <span class="confirm-row__val">Samedi 14 Juin 2026</span>
+                  </div>
+                  <div class="confirm-row">
+                    <span class="confirm-row__label">Créneau</span>
+                    <span class="confirm-row__val">09:00 — 11:00</span>
+                  </div>
+                  <div class="confirm-row">
+                    <span class="confirm-row__label">Participants</span>
+                    <span class="confirm-row__val" id="confirm-participants">2 adultes</span>
+                  </div>
+                  <div class="confirm-row">
+                    <span class="confirm-row__label">Lieu de rendez-vous</span>
+                    <span class="confirm-row__val">📍 Plage d'Albigny, Annecy</span>
+                  </div>
+                  <div class="confirm-row">
+                    <span class="confirm-row__label">Total payé</span>
+                    <span class="confirm-row__val" style="color:var(--primary); font-family:var(--font-display); font-size:18px" id="confirm-total">150 €</span>
+                  </div>
+                </div>
+
+                <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+                  <a href="#" class="btn btn-primary btn-md">📱 Ajouter au calendrier</a>
+                  <a href="#" class="btn-back" style="padding:12px 20px; border-radius:var(--radius-md); cursor:pointer; display:flex; align-items:center; gap:6px;">📄 Télécharger le PDF</a>
+                  <a href="activites.html" class="btn-back" style="padding:12px 20px; border-radius:var(--radius-md); cursor:pointer; display:flex; align-items:center; gap:6px;">🔁 Réserver une autre activité</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN — Summary -->
+      <div>
+        <div class="summary-card" id="summarySidebar">
+          <div class="summary-card__head">
+            <h3>Récapitulatif</h3>
+          </div>
+          <img src="../img/paddle-annecy.png" alt="Bundle" class="summary-img" id="summaryImg" />
+          <div class="summary-body">
+            <div class="summary-bundle-name" id="summaryName">Cours de paddle 2h — Annecy</div>
+            <div class="summary-bundle-meta">
+              📍 Annecy &nbsp;·&nbsp; ⏱ 2h &nbsp;·&nbsp; ⭐ 4,9
+            </div>
+            <div class="tag-row" id="summaryTags">
+              <span class="info-tag">📅 <span id="summaryDate">Date à choisir</span></span>
+              <span class="info-tag">⏰ <span id="summarySlot">Créneau à choisir</span></span>
+              <span class="info-tag">👥 <span id="summaryPeople">2 pers</span></span>
+            </div>
+
+            <div class="summary-divider"></div>
+
+            <div class="summary-line">
+              <span class="summary-line__label" id="baseLabel">75 € × 2 pers</span>
+              <span class="summary-line__val" id="basePrice">150 €</span>
+            </div>
+            <div class="summary-line saving" id="savingLine" style="display:none">
+              <span class="summary-line__label">Économie bundle</span>
+              <span class="summary-line__val" id="savingAmt">−30 €</span>
+            </div>
+            <div class="summary-line" id="extrasLine" style="display:none">
+              <span class="summary-line__label">Options</span>
+              <span class="summary-line__val" id="extrasAmt">+0 €</span>
+            </div>
+
+            <div class="summary-line total">
+              <span class="summary-line__label">Total</span>
+              <span class="summary-line__val" id="summaryTotal">150 €</span>
+            </div>
+
+            <div class="summary-divider"></div>
+
+            <div class="summary-guarantees">
+              <div class="summary-guarantee"><span>✅</span> <span>Assurance casse & RC incluse</span></div>
+              <div class="summary-guarantee"><span>🔄</span> <span>Annulation gratuite sous 48h</span></div>
+              <div class="summary-guarantee"><span>🛡</span> <span>Paiement 100% sécurisé</span></div>
+              <div class="summary-guarantee"><span>⭐</span> <span>Guide certifié LOOP</span></div>
+            </div>
+
+            <div class="summary-divider"></div>
+            <div style="font-size:12px; color:var(--text-muted); text-align:center; line-height:1.6;">
+              💬 Une question ? <a href="#" style="color:var(--primary); font-weight:600;">Chat avec nous</a><br/>
+              Disponible 7j/7 de 8h à 20h
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__inner">
+      <div class="footer__brand">
+        <img src="../img/loop-Logo.png" alt="LOOP" class="footer__logo" />
+        <p>Tout le sport. Une seule boucle.<br>Location de matériel sportif en France.</p>
+      </div>
+      <div class="footer__col">
+        <h5>Location</h5>
+        <ul>
+          <li><a href="#">Paddle & kayak</a></li>
+          <li><a href="#">Vélo & VTT</a></li>
+          <li><a href="#">Ski & snowboard</a></li>
+          <li><a href="#">Surf & bodyboard</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h5>Destinations</h5>
+        <ul>
+          <li><a href="destinations.html">Annecy</a></li>
+          <li><a href="destinations.html">Chamonix</a></li>
+          <li><a href="destinations.html">Savoie</a></li>
+          <li><a href="destinations.html">Lacanau</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h5>LOOP</h5>
+        <ul>
+          <li><a href="espace-pro.html">Espace Pro</a></li>
+          <li><a href="#">Notre histoire</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">CGU & Mentions</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© 2026 LOOP Sport Rent — Tous droits réservés</span>
+      <span>🔁 Tout le sport. Une seule boucle.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════ JAVASCRIPT ═══════════════ -->
+<script>
+  /* ── State ── */
+  let state = {
+    step: 1,
+    bundle: { name: 'Cours de paddle 2h — Annecy', price: 75 },
+    date: null,
+    slot: null,
+    adults: 2,
+    children: 0,
+    extras: 0,
+    extrasList: []
+  };
+
+  /* ── Steps ── */
+  function goToStep(n) {
+    if (n > state.step) return; // can't skip forward
+    switchStep(n);
+  }
+
+  function nextStep(current) {
+    switchStep(current + 1);
+  }
+
+  function prevStep(current) {
+    switchStep(current - 1);
+  }
+
+  function switchStep(n) {
+    // hide all panels
+    document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('step' + n).classList.add('active');
+
+    // update tabs
+    document.querySelectorAll('.progress-step').forEach((t, i) => {
+      t.classList.remove('active', 'done');
+      const idx = i + 1;
+      if (idx < n) { t.classList.add('done'); document.getElementById('num' + idx).textContent = ''; }
+      else if (idx === n) t.classList.add('active');
+      else document.getElementById('num' + idx).textContent = idx;
+    });
+
+    // hide sidebar on confirmation
+    if (n === 6) {
+      document.getElementById('summarySidebar').style.display = 'none';
+      document.getElementById('confirm-bundle').textContent = state.bundle.name;
+      document.getElementById('confirm-participants').textContent = state.adults + ' adulte' + (state.adults > 1 ? 's' : '') + (state.children > 0 ? (' + ' + state.children + ' enfant' + (state.children > 1 ? 's' : '')) : '');
+      document.getElementById('confirm-total').textContent = calcTotal() + ' €';
+    }
+
+    state.step = n;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  /* ── Bundle selection ── */
+  function selectBundle(el, name, price) {
+    document.querySelectorAll('.bundle-option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    state.bundle = { name, price };
+    updateSummary();
+  }
+
+  /* ── Calendar ── */
+  const MONTHS = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+  const DAYS   = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
+  let calYear = 2026, calMonth = 5; // June 2026
+
+  function renderCalendar() {
+    document.getElementById('calMonth').textContent = MONTHS[calMonth] + ' ' + calYear;
+    const grid = document.getElementById('calGrid');
+    grid.innerHTML = '';
+
+    // headers
+    DAYS.forEach(d => {
+      const h = document.createElement('div');
+      h.className = 'cal-header'; h.textContent = d;
+      grid.appendChild(h);
+    });
+
+    const firstDay = new Date(calYear, calMonth, 1).getDay();
+    const offset = (firstDay === 0) ? 6 : firstDay - 1;
+    const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+    const today = new Date();
+
+    for (let i = 0; i < offset; i++) {
+      const e = document.createElement('div'); e.className = 'cal-day empty'; grid.appendChild(e);
+    }
+
+    for (let d = 1; d <= daysInMonth; d++) {
+      const cell = document.createElement('div');
+      cell.className = 'cal-day';
+      cell.textContent = d;
+      const date = new Date(calYear, calMonth, d);
+      const isPast = date < new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      const isSun = date.getDay() === 0;
+
+      if (isPast) {
+        cell.classList.add('disabled');
+      } else {
+        if (!isSun) cell.classList.add('has-slot');
+        if (date.getDate() === today.getDate() && date.getMonth() === today.getMonth() && date.getFullYear() === today.getFullYear()) {
+          cell.classList.add('today');
+        }
+        cell.onclick = () => selectDay(cell, d);
+        if (state.date === d + '/' + (calMonth+1) + '/' + calYear) cell.classList.add('selected');
+      }
+      grid.appendChild(cell);
+    }
+  }
+
+  function selectDay(el, d) {
+    document.querySelectorAll('.cal-day.selected').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    state.date = d + '/' + (calMonth+1) + '/' + calYear;
+    document.getElementById('summaryDate').textContent = d + ' ' + MONTHS[calMonth].slice(0,3) + '.';
+    updateSummary();
+  }
+
+  function changeMonth(dir) {
+    calMonth += dir;
+    if (calMonth > 11) { calMonth = 0; calYear++; }
+    if (calMonth < 0)  { calMonth = 11; calYear--; }
+    renderCalendar();
+  }
+
+  /* ── Slot ── */
+  function selectSlot(el) {
+    document.querySelectorAll('.slot-btn.selected').forEach(s => s.classList.remove('selected'));
+    el.classList.add('selected');
+    state.slot = el.querySelector('.slot-btn__time').textContent;
+    document.getElementById('summarySlot').textContent = state.slot;
+    updateSummary();
+  }
+
+  /* ── Duration ── */
+  function selectDuration(el) {
+    document.querySelectorAll('.duration-btn.selected').forEach(b => b.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  /* ── Participants ── */
+  function changeCount(type, delta) {
+    if (type === 'adults') {
+      state.adults = Math.max(1, state.adults + delta);
+      document.getElementById('adults-count').textContent = state.adults;
+    } else {
+      state.children = Math.max(0, state.children + delta);
+      document.getElementById('children-count').textContent = state.children;
+    }
+    document.getElementById('summaryPeople').textContent = (state.adults + state.children) + ' pers';
+    updateSummary();
+  }
+
+  /* ── Extras ── */
+  function toggleExtra(el, price) {
+    el.classList.toggle('selected');
+    state.extras = 0;
+    document.querySelectorAll('.extra-option.selected').forEach(e => {
+      const p = parseInt(e.querySelector('.extra-option__price').textContent.replace('+', '').replace('€','').trim()) || 0;
+      state.extras += p;
+    });
+    if (state.extras > 0) {
+      document.getElementById('extrasLine').style.display = 'flex';
+      document.getElementById('extrasAmt').textContent = '+' + state.extras + ' €';
+    } else {
+      document.getElementById('extrasLine').style.display = 'none';
+    }
+    updateSummary();
+  }
+
+  /* ── Level ── */
+  function selectLevel(el) {
+    document.querySelectorAll('.level-btn.selected').forEach(b => b.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  /* ── Payment method ── */
+  function selectPayMethod(el) {
+    document.querySelectorAll('.pay-method.selected').forEach(m => m.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  /* ── Card formatting ── */
+  function formatCard(input) {
+    let v = input.value.replace(/\D/g, '').substring(0, 16);
+    input.value = v.replace(/(.{4})/g, '$1 ').trim();
+  }
+
+  function formatExpiry(input) {
+    let v = input.value.replace(/\D/g, '').substring(0, 4);
+    if (v.length >= 3) v = v.substring(0,2) + ' / ' + v.substring(2);
+    input.value = v;
+  }
+
+  /* ── Summary calc ── */
+  function calcTotal() {
+    const base = state.bundle.price * (state.adults + state.children * 0.7);
+    return Math.round(base + state.extras);
+  }
+
+  function updateSummary() {
+    const total = calcTotal();
+    document.getElementById('summaryName').textContent = state.bundle.name;
+    document.getElementById('baseLabel').textContent = state.bundle.price + ' € × ' + state.adults + ' pers';
+    document.getElementById('basePrice').textContent = (state.bundle.price * state.adults) + ' €';
+    document.getElementById('summaryTotal').textContent = total + ' €';
+  }
+
+  /* ── Confirm ── */
+  function confirmPayment() {
+    switchStep(6);
+    const ref = 'LOOP-2026-#' + Math.floor(10000 + Math.random() * 90000);
+    document.getElementById('confirmRef').textContent = ref;
+    document.getElementById('confirm-total').textContent = calcTotal() + ' €';
+  }
+
+  /* ── Init ── */
+  renderCalendar();
+  updateSummary();
+</script>
+
+</body>
+</html>
