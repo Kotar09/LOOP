@@ -3,21 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GO-ALP — Réserve ton activité. Loue ton matos. En un clic.</title>
+  <title>LOOP — Tout le sport. Une seule boucle.</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../css/home.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/loop.css" />
 </head>
 <body>
 
 <!-- ═══════════════ HEADER ═══════════════ -->
 <header class="header">
   <div class="container header__inner">
-    <div class="logo">GO<span>-ALP</span></div>
+    <a href="#" class="logo">
+      <img src="../img/loop-Logo.png" alt="LOOP Sport Rent" class="logo__img" />
+    </a>
     <nav class="nav">
+      <a href="#">Louer du matos</a>
       <a href="#">Activités</a>
-      <a href="#">Bundles</a>
       <a href="#">Destinations</a>
       <a href="#">Espace Pro</a>
     </nav>
@@ -29,47 +31,37 @@
 </header>
 
 <!-- ═══════════════ HERO ═══════════════ -->
-<section class="hero" style="background-image: url('assets/rando-montagne.png'); background-size: cover; background-position: center top; position: relative;">
-  <div style="position:absolute;inset:0;background:linear-gradient(90deg, rgba(3,13,23,0.92) 0%, rgba(3,13,23,0.75) 50%, rgba(3,13,23,0.4) 100%);pointer-events:none;z-index:0"></div>
-  <div class="container hero__inner" style="position:relative;z-index:1">
+<section class="hero">
+  <div class="hero__bg-img" id="heroBg"></div>
+  <div class="hero__overlay"></div>
+  <div class="container hero__inner">
     <div class="hero__content">
-      <div class="hero__tag">🏔 Outdoor montagne — Annecy · Chamonix · Savoie</div>
-      <h1>La montagne t'attend.<br><em>On s'occupe du reste.</em></h1>
-      <p class="hero__slogan">Réserve ton activité. Loue ton matos. En un clic.</p>
+      <div class="hero__tag">🏃 Location de matériel sportif</div>
+      <h1>Tout le sport.<br><em>Une seule boucle.</em></h1>
+      <p class="hero__slogan">Loue ton équipement. Réserve ton activité.<br>Sans complications, sans mauvaises surprises.</p>
       <div class="hero__ctas">
-        <a href="#bundles" class="btn btn-primary btn-lg">Réserver mon bundle activité + matos</a>
-        <a href="#activites" class="btn btn-secondary btn-lg">Explorer les activités</a>
+        <a href="#bundles" class="btn btn-primary btn-lg">Trouver mon équipement</a>
+        <a href="#activites" class="btn btn-secondary btn-lg">Voir les activités</a>
       </div>
       <div class="hero__pills">
-        <div class="hero__pill">🏄 <span>Cours de paddle 2h</span> + paddle + gilet inclus</div>
-        <div class="hero__pill">🪂 <span>Parapente tandem</span> + casque + combinaison inclus</div>
+        <div class="hero__pill"><span>🚴</span> Vélo · Ski · Paddle · Trail · Surf</div>
+        <div class="hero__pill"><span>📍</span> Partout en France — pros vérifiés</div>
       </div>
     </div>
     <div class="hero__visual">
-      <div class="hero__stat-card">
-        <div class="num">150+</div>
-        <div class="label">Pros partenaires</div>
-      </div>
-      <div class="hero__stat-card">
-        <div class="num">4,8 ⭐</div>
-        <div class="label">1 200 avis vérifiés</div>
-      </div>
-      <div class="hero__stat-card">
-        <div class="num">-30%</div>
-        <div class="label">vs réservation séparée</div>
-      </div>
-      <div class="hero__stat-card hero__stat-card--wide">
-        <div>
-          <div class="num">3 clics</div>
-          <div class="label">Pour réserver ton bundle</div>
+      <div class="hero__brand-card" id="heroCard">
+        <img src="../img/loop-runners.jpg" alt="Coureurs LOOP" class="hero__brand-img" />
+        <div class="hero__brand-overlay">
+          <div class="hero__brand-stat">
+            <div class="num">2 000+</div>
+            <div class="label">équipements disponibles</div>
+          </div>
         </div>
-        <div class="mini-bar" aria-hidden="true">
-          <span style="height:16px"></span>
-          <span style="height:24px"></span>
-          <span style="height:36px"></span>
-          <span style="height:28px"></span>
-          <span style="height:44px"></span>
-        </div>
+      </div>
+      <div class="hero__stats">
+        <div class="hero__stat-pill"><strong>150+</strong> pros partenaires</div>
+        <div class="hero__stat-pill"><strong>4,9 ⭐</strong> note moyenne</div>
+        <div class="hero__stat-pill"><strong>0€</strong> caution cachée</div>
       </div>
     </div>
   </div>
@@ -78,101 +70,131 @@
 <!-- ═══════════════ TRUST STRIP ═══════════════ -->
 <div class="trust-strip">
   <div class="container trust-strip__inner">
-    <div class="trust-item"><span class="trust-icon">✅</span> Assurance incluse</div>
-    <div class="trust-item"><span class="trust-icon">🤝</span> 150+ pros partenaires</div>
-    <div class="trust-item"><span class="trust-icon">⭐</span> 4,8/5 — 1 200 avis</div>
-    <div class="trust-item"><span class="trust-icon">🔒</span> Paiement sécurisé</div>
+    <div class="trust-item">✅ Matériel certifié</div>
+    <div class="trust-item">🔄 Retour flexible</div>
+    <div class="trust-item">🛡 Assurance incluse</div>
+    <div class="trust-item">⭐ 4,9/5 — 3 000 avis</div>
   </div>
 </div>
 
-<!-- ═══════════════ BUNDLES ═══════════════ -->
+<!-- ═══════════════ BUNDLES / ÉQUIPEMENTS ═══════════════ -->
 <section class="section" id="bundles">
   <div class="container">
     <div class="section__head">
-      <div class="badge-bundle" style="margin-bottom:12px">⚡ Le bundle GO-ALP</div>
-      <h2 class="section-title">Activité + matériel.<br>En un clic. Pas de frais cachés.</h2>
-      <p class="section-subtitle">Une seule transaction. Une seule assurance. Un prix clair.</p>
+      <div class="badge-loop">⚡ Le principe LOOP</div>
+      <h2 class="section-title">Activité + matériel inclus.<br>En une seule réservation.</h2>
+      <p class="section-subtitle">Un seul paiement. Un seul assureur. Un seul interlocuteur.</p>
     </div>
     <div class="bundles-grid">
 
-      <!-- Bundle 1 -->
       <div class="bundle-card">
-        <div class="bundle-card__img" style="background:none;padding:0">
-          <img src="../img/paddle-annecy.png" alt="Paddle sur le lac d'Annecy" style="width:100%;height:100%;object-fit:cover;object-position:center" />
-          <div class="bundle-card__badge"><span class="badge-bundle">⚡ Bundle exclusif</span></div>
+        <div class="bundle-card__img">
+          <img src="../img/paddle-annecy.png" alt="Paddle Annecy" />
+          <div class="bundle-card__badge"><span class="badge-loop">⚡ Bundle LOOP</span></div>
         </div>
         <div class="bundle-card__body">
           <div class="bundle-card__title">Cours de paddle 2h — Annecy</div>
           <div class="bundle-card__includes">Inclus : <strong>paddle + gilet + assurance</strong></div>
-          <div class="bundle-card__rating">
-            <span class="stars">★★★★★</span>
-            <span>4,9 <span style="color:#A7BCB7">(234 avis)</span></span>
-          </div>
+          <div class="bundle-card__rating"><span class="stars">★★★★★</span> 4,9 <span class="muted">(234 avis)</span></div>
         </div>
         <div class="bundle-card__footer">
           <div class="price-block">
-            <span class="price-current">75 €<small style="font-size:13px;font-weight:400">/pers</small></span>
+            <span class="price-current">75 €<small>/pers</small></span>
             <span class="price-old">105 €</span>
           </div>
-          <div style="text-align:right">
+          <div>
             <div class="price-saving">− 30 € 🎉</div>
             <a href="#" class="btn btn-primary btn-sm" style="margin-top:6px">Réserver</a>
           </div>
         </div>
       </div>
 
-      <!-- Bundle 2 -->
       <div class="bundle-card">
-        <div class="bundle-card__img" style="background:none;padding:0">
-          <img src="../img/parapente-chamonix.png" alt="Parapente sur Chamonix" style="width:100%;height:100%;object-fit:cover;object-position:center" />
-          <div class="bundle-card__badge"><span class="badge-bundle">⚡ Bundle exclusif</span></div>
+        <div class="bundle-card__img">
+          <img src="../img/parapente-chamonix.png" alt="Parapente Chamonix" />
+          <div class="bundle-card__badge"><span class="badge-loop">⚡ Bundle LOOP</span></div>
         </div>
         <div class="bundle-card__body">
           <div class="bundle-card__title">Vol tandem parapente — Chamonix</div>
           <div class="bundle-card__includes">Inclus : <strong>casque + combinaison + photos</strong></div>
-          <div class="bundle-card__rating">
-            <span class="stars">★★★★★</span>
-            <span>4,8 <span style="color:#A7BCB7">(189 avis)</span></span>
-          </div>
+          <div class="bundle-card__rating"><span class="stars">★★★★★</span> 4,8 <span class="muted">(189 avis)</span></div>
         </div>
         <div class="bundle-card__footer">
           <div class="price-block">
-            <span class="price-current">120 €<small style="font-size:13px;font-weight:400">/pers</small></span>
+            <span class="price-current">120 €<small>/pers</small></span>
             <span class="price-old">150 €</span>
           </div>
-          <div style="text-align:right">
+          <div>
             <div class="price-saving">− 30 € 🎉</div>
             <a href="#" class="btn btn-primary btn-sm" style="margin-top:6px">Réserver</a>
           </div>
         </div>
       </div>
 
-      <!-- Bundle 3 -->
       <div class="bundle-card">
-        <div class="bundle-card__img" style="background:none;padding:0">
-          <img src="../img/rando-montagne.png" alt="Randonnée Lac Blanc Chamonix" style="width:100%;height:100%;object-fit:cover;object-position:center top" />
-          <div class="bundle-card__badge"><span class="badge-bundle">⚡ Bundle exclusif</span></div>
+        <div class="bundle-card__img">
+          <img src="../img/rando-montagne.png" alt="Rando Lac Blanc" />
+          <div class="bundle-card__badge"><span class="badge-loop">⚡ Bundle LOOP</span></div>
         </div>
         <div class="bundle-card__body">
           <div class="bundle-card__title">Rando guidée "Lac Blanc"</div>
           <div class="bundle-card__includes">Inclus : <strong>bâtons + crampons + sac à dos</strong></div>
-          <div class="bundle-card__rating">
-            <span class="stars">★★★★★</span>
-            <span>4,9 <span style="color:#A7BCB7">(312 avis)</span></span>
-          </div>
+          <div class="bundle-card__rating"><span class="stars">★★★★★</span> 4,9 <span class="muted">(312 avis)</span></div>
         </div>
         <div class="bundle-card__footer">
           <div class="price-block">
-            <span class="price-current">45 €<small style="font-size:13px;font-weight:400">/pers</small></span>
+            <span class="price-current">45 €<small>/pers</small></span>
             <span class="price-old">65 €</span>
           </div>
-          <div style="text-align:right">
+          <div>
             <div class="price-saving">− 20 € 🎉</div>
             <a href="#" class="btn btn-primary btn-sm" style="margin-top:6px">Réserver</a>
           </div>
         </div>
       </div>
 
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ BRAND LIFESTYLE ═══════════════ -->
+<section class="section section--dark">
+  <div class="container">
+    <div class="section__head section__head--light">
+      <h2 class="section-title section-title--light">LOOP, c'est un état d'esprit.</h2>
+      <p class="section-subtitle section-subtitle--light">Du matos pro. Des pros passionnés. Une communauté de sportifs.</p>
+    </div>
+    <div class="lifestyle-grid">
+      <div class="lifestyle-card lifestyle-card--tall">
+        <img src="../img/loop-runners.jpg" alt="Communauté LOOP en course" />
+        <div class="lifestyle-card__overlay">
+          <div class="lifestyle-card__tag">Communauté</div>
+          <p>Des milliers de sportifs qui bouclent chaque week-end.</p>
+        </div>
+      </div>
+      <div class="lifestyle-col">
+        <div class="lifestyle-card">
+          <img src="../img/loop-bottle.jpg" alt="Gourde LOOP" />
+          <div class="lifestyle-card__overlay">
+            <div class="lifestyle-card__tag">Équipement</div>
+            <p>Du matos certifié, entretenu, prêt à l'emploi.</p>
+          </div>
+        </div>
+        <div class="lifestyle-card">
+          <img src="../img/loop-caps.jpg" alt="Casquettes LOOP" />
+          <div class="lifestyle-card__overlay">
+            <div class="lifestyle-card__tag">Style</div>
+            <p>Une identité qui suit jusque sur le podium.</p>
+          </div>
+        </div>
+      </div>
+      <div class="lifestyle-card">
+        <img src="../img/loop-keyring.jpg" alt="Porte-clés LOOP" />
+        <div class="lifestyle-card__overlay">
+          <div class="lifestyle-card__tag">Détails</div>
+          <p>Tout le sport. Une seule boucle.</p>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -186,56 +208,56 @@
     <div class="steps-grid">
       <div class="step">
         <div class="step__num">1</div>
-        <div class="step__title">Choisis ton activité</div>
-        <p class="step__desc">Paddle, parapente, rando… filtre par destination et créneau disponible en temps réel.</p>
+        <div class="step__title">Choisis ton sport</div>
+        <p class="step__desc">Paddle, parapente, rando, vélo… Filtre par destination et créneau dispo en temps réel.</p>
       </div>
       <div class="step">
         <div class="step__num">2</div>
         <div class="step__title">Le matos est inclus</div>
-        <p class="step__desc">Rien à acheter, rien à chercher. L'équipement est intégré au bundle, assurance comprise.</p>
+        <p class="step__desc">Rien à acheter, rien à chercher. Tout l'équipement est dans ton bundle LOOP, assurance comprise.</p>
       </div>
       <div class="step">
         <div class="step__num">3</div>
         <div class="step__title">Réserve en 3 clics</div>
-        <p class="step__desc">Paiement sécurisé, confirmation instantanée. Pas de validation manuelle, pas d'attente.</p>
+        <p class="step__desc">Paiement sécurisé, confirmation immédiate. Pas d'attente, pas de validation manuelle.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════ WHY GO-ALP ═══════════════ -->
+<!-- ═══════════════ WHY LOOP ═══════════════ -->
 <section class="section">
   <div class="container">
     <div class="section__head">
-      <h2 class="section-title">Pourquoi on est différents ?</h2>
+      <h2 class="section-title">Pourquoi LOOP ?</h2>
     </div>
     <div class="why-grid">
       <div class="why-item">
         <div class="why-item__icon green">✅</div>
         <div class="why-item__text">
-          <h4>Du vécu, pas du stocké</h4>
-          <p>Aucun P2P sans encadrement. Chaque location est liée à une activité guidée par un professionnel certifié.</p>
+          <h4>Matériel pro, pas particulier</h4>
+          <p>Chaque équipement est fourni par un prestataire certifié. Zéro litige, zéro caution absurde.</p>
         </div>
       </div>
       <div class="why-item">
         <div class="why-item__icon green">✅</div>
         <div class="why-item__text">
           <h4>Offre réelle, dispo réelle</h4>
-          <p>Pas de pages vides. Chaque bundle affiché est disponible à la réservation immédiate.</p>
+          <p>Pas de pages fantômes. Ce que tu vois est réservable maintenant.</p>
         </div>
       </div>
       <div class="why-item">
-        <div class="why-item__icon orange">✅</div>
+        <div class="why-item__icon yellow">✅</div>
         <div class="why-item__text">
-          <h4>Assurance incluse, caution zéro</h4>
-          <p>Fini les cautions absurdes. L'assurance casse et litiges est incluse dans chaque bundle GO-ALP.</p>
+          <h4>Assurance incluse, toujours</h4>
+          <p>Chaque bundle LOOP inclut une assurance casse et responsabilité civile.</p>
         </div>
       </div>
       <div class="why-item">
-        <div class="why-item__icon orange">✅</div>
+        <div class="why-item__icon yellow">✅</div>
         <div class="why-item__text">
           <h4>Pros vérifiés, avis croisés</h4>
-          <p>Chaque guide est certifié. Les avis sont bilatéraux : tu notes le pro, le pro te note.</p>
+          <p>Chaque guide est certifié. Les avis sont bilatéraux — tu notes, le pro te note.</p>
         </div>
       </div>
     </div>
@@ -258,7 +280,7 @@
         </div>
       </div>
       <div class="dest-card">
-        <img src="../img/dest-chamonix.png" alt="Chamonix Mont-Blanc" class="dest-card__photo" />
+        <img src="../img/dest-chamonix.jpg" alt="Chamonix Mont-Blanc" class="dest-card__photo" />
         <div class="dest-card__overlay"></div>
         <div class="dest-card__info">
           <div class="dest-card__name">Chamonix</div>
@@ -274,7 +296,7 @@
         </div>
       </div>
       <div class="dest-card">
-        <img src="../img/dest-savoie.jpg" alt="Lac alpin en Savoie" class="dest-card__photo" />
+        <img src="../img/dest-savoie.jpg" alt="Savoie" class="dest-card__photo" />
         <div class="dest-card__overlay"></div>
         <div class="dest-card__info">
           <div class="dest-card__name">Savoie</div>
@@ -289,38 +311,29 @@
 <section class="section">
   <div class="container">
     <div class="section__head">
-      <h2 class="section-title">Ce qu'ils en disent</h2>
-      <p class="section-subtitle">⭐ 4,8/5 sur 1 200 avis vérifiés</p>
+      <h2 class="section-title">La communauté LOOP en parle</h2>
+      <p class="section-subtitle">⭐ 4,9/5 sur 3 000 avis vérifiés</p>
     </div>
     <div class="testimonials-grid">
       <div class="testimonial">
-        <p class="testimonial__text">"J'ai réservé paddle + cours en 2 minutes. Jamais vu ça de si simple, et le prix tout compris c'est franchement imbattable."</p>
+        <p class="testimonial__text">"J'ai loué un paddle et réservé le cours en 2 minutes. Jamais vu ça de si simple — et le prix tout compris c'est imbattable."</p>
         <div class="testimonial__author">
           <div class="avatar">M</div>
-          <div>
-            <div class="author-name">Marie</div>
-            <div class="author-city">Annecy ⭐⭐⭐⭐⭐</div>
-          </div>
+          <div><div class="author-name">Marie</div><div class="author-city">Annecy ⭐⭐⭐⭐⭐</div></div>
         </div>
       </div>
       <div class="testimonial">
-        <p class="testimonial__text">"Le bundle parapente m'a fait gagner 50 € et surtout un temps fou. Plus besoin de courir entre 3 applis différentes."</p>
+        <p class="testimonial__text">"Le bundle parapente m'a économisé 50 € et surtout un temps fou. Plus besoin de courir entre 3 applis différentes."</p>
         <div class="testimonial__author">
           <div class="avatar">T</div>
-          <div>
-            <div class="author-name">Thomas</div>
-            <div class="author-city">Chamonix ⭐⭐⭐⭐⭐</div>
-          </div>
+          <div><div class="author-name">Thomas</div><div class="author-city">Chamonix ⭐⭐⭐⭐⭐</div></div>
         </div>
       </div>
       <div class="testimonial">
-        <p class="testimonial__text">"Enfin une appli qui comprend vraiment les sportifs outdoor. L'assurance incluse, c'est le détail qui change tout."</p>
+        <p class="testimonial__text">"LOOP a compris les sportifs outdoor. L'assurance incluse, les pros vérifiés — c'est le détail qui change tout."</p>
         <div class="testimonial__author">
           <div class="avatar">J</div>
-          <div>
-            <div class="author-name">Julie</div>
-            <div class="author-city">Lyon ⭐⭐⭐⭐⭐</div>
-          </div>
+          <div><div class="author-name">Julie</div><div class="author-city">Lyon ⭐⭐⭐⭐⭐</div></div>
         </div>
       </div>
     </div>
@@ -330,11 +343,11 @@
 <!-- ═══════════════ CTA FINAL ═══════════════ -->
 <section class="cta-final">
   <div class="container">
-    <h2 class="cta-final__title">Prêt à vivre<br><em>la montagne autrement ?</em></h2>
-    <p class="cta-final__sub">L'activité. Le matos. La montagne. En 3 clics.</p>
+    <h2 class="cta-final__title">Prêt à boucler<br><em>ta prochaine aventure ?</em></h2>
+    <p class="cta-final__sub">Tout le sport. Une seule boucle.</p>
     <div class="cta-final__actions">
-      <a href="#bundles" class="btn btn-primary btn-lg">🔥 Voir tous les bundles</a>
-      <a href="#" class="btn btn-secondary btn-lg">Devenir partenaire pro</a>
+      <a href="#bundles" class="btn btn-primary btn-lg">🔥 Voir les bundles</a>
+      <a href="#" class="btn btn-secondary btn-lg">Devenir partenaire</a>
     </div>
     <div class="platform-btns">
       <button class="platform-btn">📱 iOS</button>
@@ -349,16 +362,16 @@
   <div class="container">
     <div class="footer__inner">
       <div class="footer__brand">
-        <div class="logo">GO<span>-ALP</span></div>
-        <p>La plateforme de référence de l'outdoor montagne. Bundle activité + matériel en 1 clic.</p>
+        <img src="../img/loop-Logo.png" alt="LOOP" class="footer__logo" />
+        <p>Tout le sport. Une seule boucle.<br>Location de matériel sportif en France.</p>
       </div>
       <div class="footer__col">
-        <h5>Activités</h5>
+        <h5>Location</h5>
         <ul>
           <li><a href="#">Paddle & kayak</a></li>
-          <li><a href="#">Parapente</a></li>
-          <li><a href="#">Randonnée</a></li>
-          <li><a href="#">Ski de rando</a></li>
+          <li><a href="#">Vélo & VTT</a></li>
+          <li><a href="#">Ski & snowboard</a></li>
+          <li><a href="#">Surf & bodyboard</a></li>
         </ul>
       </div>
       <div class="footer__col">
@@ -371,18 +384,18 @@
         </ul>
       </div>
       <div class="footer__col">
-        <h5>Aide</h5>
+        <h5>LOOP</h5>
         <ul>
           <li><a href="#">Espace Pro</a></li>
+          <li><a href="#">Notre histoire</a></li>
           <li><a href="#">Contact</a></li>
-          <li><a href="#">Mentions légales</a></li>
-          <li><a href="#">CGU</a></li>
+          <li><a href="#">CGU & Mentions</a></li>
         </ul>
       </div>
     </div>
     <div class="footer__bottom">
-      <span>© 2026 GO-ALP — Tous droits réservés</span>
-      <span>🏔 Outdoor montagne · Annecy · Chamonix · Savoie</span>
+      <span>© 2026 LOOP Sport Rent — Tous droits réservés</span>
+      <span>🔁 Tout le sport. Une seule boucle.</span>
     </div>
   </div>
 </footer>
