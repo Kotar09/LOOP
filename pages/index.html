@@ -14,7 +14,7 @@
 <!-- ═══════════════ HEADER ═══════════════ -->
 <header class="header">
   <div class="container header__inner">
-    <a href="#" class="logo">
+    <a href="index.html" class="logo">
       <img src="../img/loop-Logo.png" alt="LOOP Sport Rent" class="logo__img" />
     </a>
     <nav class="nav">
@@ -27,8 +27,50 @@
       <button class="btn-link">Se connecter</button>
       <a href="reservation.html" class="btn btn-primary btn-sm">Réserver</a>
     </div>
+    <!-- Burger -->
+    <button class="burger" id="burger" aria-label="Menu" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </header>
+
+<!-- ═══════════════ MOBILE NAV ═══════════════ -->
+<nav class="mobile-nav" id="mobileNav">
+  <div class="mobile-nav__links">
+    <a href="louer-du-matos.html"><span class="nav-icon">🎒</span> Louer du matos <span class="nav-arrow">›</span></a>
+    <a href="activites.html"><span class="nav-icon">🏃</span> Activités <span class="nav-arrow">›</span></a>
+    <a href="destinations.html"><span class="nav-icon">📍</span> Destinations <span class="nav-arrow">›</span></a>
+    <a href="espace-pro.html"><span class="nav-icon">🤝</span> Espace Pro <span class="nav-arrow">›</span></a>
+  </div>
+  <div class="mobile-nav__actions">
+    <a href="reservation.html" class="btn btn-primary">🔥 Réserver maintenant</a>
+    <button class="mobile-nav__btn-link">Se connecter</button>
+  </div>
+  <div class="mobile-nav__footer">
+    <a href="#">CGU</a>
+    <a href="#">Contact</a>
+    <a href="#">Notre histoire</a>
+    <a href="#">© 2026 LOOP</a>
+  </div>
+</nav>
+
+<script>
+  function toggleMenu() {
+    const burger = document.getElementById('burger');
+    const nav = document.getElementById('mobileNav');
+    burger.classList.toggle('open');
+    nav.classList.toggle('open');
+    document.body.classList.toggle('nav-open');
+  }
+  // Ferme le menu au clic sur un lien
+  document.querySelectorAll('.mobile-nav a').forEach(link => {
+    link.addEventListener('click', () => {
+      document.getElementById('burger').classList.remove('open');
+      document.getElementById('mobileNav').classList.remove('open');
+      document.body.classList.remove('nav-open');
+    });
+  });
+</script>
 
 <!-- ═══════════════ HERO ═══════════════ -->
 <section class="hero">
@@ -104,7 +146,7 @@
           </div>
           <div>
             <div class="price-saving">− 30 € 🎉</div>
-            <a href="#" class="btn btn-primary btn-sm" style="margin-top:6px">Réserver</a>
+            <a href="reservation.html" class="btn btn-primary btn-sm" style="margin-top:6px">Réserver</a>
           </div>
         </div>
       </div>
@@ -126,7 +168,7 @@
           </div>
           <div>
             <div class="price-saving">− 30 € 🎉</div>
-            <a href="#" class="btn btn-primary btn-sm" style="margin-top:6px">Réserver</a>
+            <a href="reservation.html" class="btn btn-primary btn-sm" style="margin-top:6px">Réserver</a>
           </div>
         </div>
       </div>
@@ -148,7 +190,7 @@
           </div>
           <div>
             <div class="price-saving">− 20 € 🎉</div>
-            <a href="#" class="btn btn-primary btn-sm" style="margin-top:6px">Réserver</a>
+            <a href="reservation.html" class="btn btn-primary btn-sm" style="margin-top:6px">Réserver</a>
           </div>
         </div>
       </div>

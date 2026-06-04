@@ -126,10 +126,41 @@
     </nav>
     <div class="header__actions">
       <button class="btn-link">Se connecter</button>
-      <a href="#" class="btn btn-primary btn-sm">Réserver</a>
+      <a href="reservation.html" class="btn btn-primary btn-sm">Réserver</a>
     </div>
+    <button class="burger" id="burger" aria-label="Menu" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </header>
+
+<nav class="mobile-nav" id="mobileNav">
+  <div class="mobile-nav__links">
+    <a href="louer-du-matos.html" class="active"><span class="nav-icon">🎒</span> Louer du matos <span class="nav-arrow">›</span></a>
+    <a href="activites.html"><span class="nav-icon">🏃</span> Activités <span class="nav-arrow">›</span></a>
+    <a href="destinations.html"><span class="nav-icon">📍</span> Destinations <span class="nav-arrow">›</span></a>
+    <a href="espace-pro.html"><span class="nav-icon">🤝</span> Espace Pro <span class="nav-arrow">›</span></a>
+  </div>
+  <div class="mobile-nav__actions">
+    <a href="reservation.html" class="btn btn-primary">🔥 Réserver maintenant</a>
+    <button class="mobile-nav__btn-link">Se connecter</button>
+  </div>
+  <div class="mobile-nav__footer">
+    <a href="#">CGU</a><a href="#">Contact</a><a href="#">Notre histoire</a><a href="#">© 2026 LOOP</a>
+  </div>
+</nav>
+<script>
+  function toggleMenu() {
+    document.getElementById('burger').classList.toggle('open');
+    document.getElementById('mobileNav').classList.toggle('open');
+    document.body.classList.toggle('nav-open');
+  }
+  document.querySelectorAll('.mobile-nav a').forEach(l => l.addEventListener('click', () => {
+    document.getElementById('burger').classList.remove('open');
+    document.getElementById('mobileNav').classList.remove('open');
+    document.body.classList.remove('nav-open');
+  }));
+</script>
 
 <!-- ═══════════════ PAGE HERO ═══════════════ -->
 <section class="page-hero">
@@ -267,7 +298,7 @@
             </div>
             <div class="mato-card__footer">
               <div class="day-price">18 €<small>/jour</small></div>
-              <a href="#" class="btn btn-primary btn-sm">Réserver</a>
+              <a href="reservation.html" class="btn btn-primary btn-sm">Réserver</a>
             </div>
           </div>
 
@@ -286,7 +317,7 @@
             </div>
             <div class="mato-card__footer">
               <div class="day-price">28 €<small>/jour</small></div>
-              <a href="#" class="btn btn-primary btn-sm">Réserver</a>
+              <a href="reservation.html" class="btn btn-primary btn-sm">Réserver</a>
             </div>
           </div>
 
@@ -305,7 +336,7 @@
             </div>
             <div class="mato-card__footer">
               <div class="day-price">12 €<small>/jour</small></div>
-              <a href="#" class="btn btn-primary btn-sm">Réserver</a>
+              <a href="reservation.html" class="btn btn-primary btn-sm">Réserver</a>
             </div>
           </div>
 
@@ -324,7 +355,7 @@
             </div>
             <div class="mato-card__footer">
               <div class="day-price">35 €<small>/jour</small></div>
-              <a href="#" class="btn btn-primary btn-sm">Réserver</a>
+              <a href="reservation.html" class="btn btn-primary btn-sm">Réserver</a>
             </div>
           </div>
 
@@ -343,7 +374,7 @@
             </div>
             <div class="mato-card__footer">
               <div class="day-price">22 €<small>/jour</small></div>
-              <a href="#" class="btn btn-primary btn-sm">Réserver</a>
+              <a href="reservation.html" class="btn btn-primary btn-sm">Réserver</a>
             </div>
           </div>
 
@@ -362,7 +393,7 @@
             </div>
             <div class="mato-card__footer">
               <div class="day-price">15 €<small>/jour</small></div>
-              <a href="#" class="btn btn-primary btn-sm">Réserver</a>
+              <a href="reservation.html" class="btn btn-primary btn-sm">Réserver</a>
             </div>
           </div>
 
